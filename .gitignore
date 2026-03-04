@@ -13,3 +13,4 @@ composer.lock
 scripts
 phpunit.xml.local
 /**/settings.json
+logs
