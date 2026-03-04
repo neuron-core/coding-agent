@@ -43,7 +43,7 @@ export PATH="$HOME/.config/composer/vendor/bin:$PATH"
 composer global config bin-dir --absolute
 ```
 
-### Local Installation (Project-Specific)
+### Per Project Installation
 
 Install Coding Agent as a dev dependency in your project to avoid system-level configuration:
 
@@ -51,17 +51,13 @@ Install Coding Agent as a dev dependency in your project to avoid system-level c
 composer require --dev neuron-core/synapse
 ```
 
-Then configure a custom composer script in your `composer.json` to run the agent conveniently:
+Run the command below to start the agent:
 
-```json
-{
-    "scripts": {
-        "synapse": "vendor/bin/synapse"
-    }
-}
+```bash
+vendor/bin/synapse
 ```
 
-> **Note**: On native Windows (not WSL/Git Bash), use `".\\vendor\\bin\\synapse"` instead.
+> **Note**: On Windows (not WSL/Git Bash), use `".\vendor\bin\synapse"` instead.
 
 Now you can run the agent from your project directory:
 
