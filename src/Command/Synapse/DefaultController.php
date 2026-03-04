@@ -232,7 +232,7 @@ class DefaultController extends CommandController
             $this->display($content);
             $this->newline();
             $this->info("Tip: Install 'glow' for better markdown rendering:");
-            $this->display("  - Ubuntu/Debian: sudo apt install glow");
+            $this->display("  - Ubuntu/Debian: sudo snap install glow");
             $this->display("  - macOS: brew install glow");
             $this->display("  - Via cargo: cargo install glow");
             $this->newline();
@@ -246,6 +246,7 @@ class DefaultController extends CommandController
      */
     private function isGlowInstalled(): bool
     {
-        return shell_exec('command -v glow') !== null;
+        $output = shell_exec('command -v glow');
+        return $output !== null && trim($output) !== '';
     }
 }
