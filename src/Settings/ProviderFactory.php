@@ -48,15 +48,23 @@ class ProviderFactory implements ProviderFactoryInterface
      */
     public function create(array $config): AIProviderInterface
     {
-        $type = strtolower($config['type']);
-
-        if (!isset($this->factories[$type])) {
+        // Enforce strict format: provider must be a nested object with 'type' key
+        if (!isset($config['provider']) || !is_array($config['provider']) || !isset($config['provider']['type'])) {
             throw new \RuntimeException(
-                sprintf('Unknown provider "%s". Available providers: %s', $this->factories[$type], implode(', ', array_keys($this->factories)))
+                'Invalid provider configuration. Expected format: {"provider": {"type": "anthropic", ...}}'
             );
         }
 
-        return ($this->factories[$type])($config);
+        $type = strtolower($config['provider']['type']);
+
+        if (!isset($this->factories[$type])) {
+            throw new \RuntimeException(
+                sprintf('Unknown provider "%s". Available providers: %s', $type, implode(', ', array_keys($this->factories)))
+            );
+        }
+
+        // Pass only the provider config to the factory methods
+        return ($this->factories[$type])($config['provider']);
     }
 
     /**
@@ -76,90 +84,90 @@ class ProviderFactory implements ProviderFactoryInterface
 
     private function createAnthropic(array $settings): Anthropic
     {
-        $apiKey = $settings['anthropic']['api_key'] ?? $settings['api_key']
+        $apiKey = $settings['api_key']
             ?? throw new \RuntimeException(
-                'Anthropic API key is not configured. Add "anthropic.api_key" or "api_key" to .neuron/settings.json.'
+                'Anthropic API key is not configured. Add "api_key" to provider object in .neuron/settings.json.'
             );
 
         return new Anthropic(
             key: $apiKey,
-            model: $settings['anthropic']['model'] ?? $settings['model'] ?? 'claude-sonnet-4-20250514',
-            max_tokens: $settings['anthropic']['max_tokens'] ?? 8192,
+            model: $settings['model'] ?? 'claude-sonnet-4-20250514',
+            max_tokens: $settings['max_tokens'] ?? 8192,
         );
     }
 
     private function createOpenAI(array $settings): OpenAI
     {
-        $apiKey = $settings['openai']['api_key'] ?? $settings['api_key']
+        $apiKey = $settings['api_key']
             ?? throw new \RuntimeException(
-                'OpenAI API key is not configured. Add "openai.api_key" or "api_key" to .neuron/settings.json.'
+                'OpenAI API key is not configured. Add "api_key" to provider object in .neuron/settings.json.'
             );
 
         $parameters = [];
-        if (isset($settings['openai']['max_tokens'])) {
-            $parameters['max_tokens'] = $settings['openai']['max_tokens'];
+        if (isset($settings['max_tokens'])) {
+            $parameters['max_tokens'] = $settings['max_tokens'];
         }
 
         return new OpenAI(
             key: $apiKey,
-            model: $settings['openai']['model'] ?? $settings['model'] ?? 'gpt-4',
+            model: $settings['model'] ?? 'gpt-4',
             parameters: $parameters,
         );
     }
 
     private function createGemini(array $settings): Gemini
     {
-        $apiKey = $settings['gemini']['api_key'] ?? $settings['api_key']
+        $apiKey = $settings['api_key']
             ?? throw new \RuntimeException(
-                'Gemini API key is not configured. Add "gemini.api_key" or "api_key" to .neuron/settings.json.'
+                'Gemini API key is not configured. Add "api_key" to provider object in .neuron/settings.json.'
             );
 
         $parameters = [];
-        if (isset($settings['gemini']['max_tokens'])) {
-            $parameters['max_tokens'] = $settings['gemini']['max_tokens'];
+        if (isset($settings['max_tokens'])) {
+            $parameters['max_tokens'] = $settings['max_tokens'];
         }
 
         return new Gemini(
             key: $apiKey,
-            model: $settings['gemini']['model'] ?? $settings['model'] ?? 'gemini-pro',
+            model: $settings['model'] ?? 'gemini-pro',
             parameters: $parameters,
         );
     }
 
     private function createCohere(array $settings): Cohere
     {
-        $apiKey = $settings['cohere']['api_key'] ?? $settings['api_key']
+        $apiKey = $settings['api_key']
             ?? throw new \RuntimeException(
-                'Cohere API key is not configured. Add "cohere.api_key" or "api_key" to .neuron/settings.json.'
+                'Cohere API key is not configured. Add "api_key" to provider object in .neuron/settings.json.'
             );
 
         $parameters = [];
-        if (isset($settings['cohere']['max_tokens'])) {
-            $parameters['max_tokens'] = $settings['cohere']['max_tokens'];
+        if (isset($settings['max_tokens'])) {
+            $parameters['max_tokens'] = $settings['max_tokens'];
         }
 
         return new Cohere(
             key: $apiKey,
-            model: $settings['cohere']['model'] ?? $settings['model'] ?? 'command',
+            model: $settings['model'] ?? 'command',
             parameters: $parameters,
         );
     }
 
     private function createMistral(array $settings): Mistral
     {
-        $apiKey = $settings['mistral']['api_key'] ?? $settings['api_key']
+        $apiKey = $settings['api_key']
             ?? throw new \RuntimeException(
-                'Mistral API key is not configured. Add "mistral.api_key" or "api_key" to .neuron/settings.json.'
+                'Mistral API key is not configured. Add "api_key" to provider object in .neuron/settings.json.'
             );
 
         $parameters = [];
-        if (isset($settings['mistral']['max_tokens'])) {
-            $parameters['max_tokens'] = $settings['mistral']['max_tokens'];
+        if (isset($settings['max_tokens'])) {
+            $parameters['max_tokens'] = $settings['max_tokens'];
         }
 
         return new Mistral(
             key: $apiKey,
-            model: $settings['mistral']['model'] ?? $settings['model'] ?? 'mistral-tiny',
+            model: $settings['model'] ?? 'mistral-tiny',
             parameters: $parameters,
         );
     }
@@ -167,52 +175,51 @@ class ProviderFactory implements ProviderFactoryInterface
     private function createOllama(array $settings): Ollama
     {
         $parameters = [];
-        if (isset($settings['ollama']['max_tokens'])) {
-            $parameters['max_tokens'] = $settings['ollama']['max_tokens'];
+        if (isset($settings['max_tokens'])) {
+            $parameters['max_tokens'] = $settings['max_tokens'];
         }
 
         return new Ollama(
-            url: $settings['ollama']['base_url'] ?? 'http://localhost:11434',
-            model: $settings['ollama']['model'] ?? $settings['model'] ?? 'llama2',
+            url: $settings['base_url'] ?? 'http://localhost:11434',
+            model: $settings['model'] ?? 'llama2',
             parameters: $parameters,
         );
     }
 
     private function createGrok(array $settings): Grok
     {
-        $apiKey = $settings['xai']['api_key'] ?? $settings['grok']['api_key'] ?? $settings['api_key']
+        $apiKey = $settings['api_key']
             ?? throw new \RuntimeException(
-                'xAI API key is not configured. Add "xai.api_key", "grok.api_key", or "api_key" to .neuron/settings.json.'
+                'xAI API key is not configured. Add "api_key" to provider object in .neuron/settings.json.'
             );
 
-        $maxTokensKey = $settings['xai']['max_tokens'] ?? $settings['grok']['max_tokens'] ?? null;
         $parameters = [];
-        if ($maxTokensKey !== null) {
-            $parameters['max_tokens'] = $maxTokensKey;
+        if (isset($settings['max_tokens'])) {
+            $parameters['max_tokens'] = $settings['max_tokens'];
         }
 
         return new Grok(
             key: $apiKey,
-            model: $settings['xai']['model'] ?? $settings['grok']['model'] ?? $settings['model'] ?? 'grok-beta',
+            model: $settings['model'] ?? 'grok-beta',
             parameters: $parameters,
         );
     }
 
     private function createDeepseek(array $settings): Deepseek
     {
-        $apiKey = $settings['deepseek']['api_key'] ?? $settings['api_key']
+        $apiKey = $settings['api_key']
             ?? throw new \RuntimeException(
-                'Deepseek API key is not configured. Add "deepseek.api_key" or "api_key" to .neuron/settings.json.'
+                'Deepseek API key is not configured. Add "api_key" to provider object in .neuron/settings.json.'
             );
 
         $parameters = [];
-        if (isset($settings['deepseek']['max_tokens'])) {
-            $parameters['max_tokens'] = $settings['deepseek']['max_tokens'];
+        if (isset($settings['max_tokens'])) {
+            $parameters['max_tokens'] = $settings['max_tokens'];
         }
 
         return new Deepseek(
             key: $apiKey,
-            model: $settings['deepseek']['model'] ?? $settings['model'] ?? 'deepseek-chat',
+            model: $settings['model'] ?? 'deepseek-chat',
             parameters: $parameters,
         );
     }
