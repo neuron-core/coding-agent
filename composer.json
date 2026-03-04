@@ -1,5 +1,5 @@
 {
-    "name": "neuron-core/coding-agent",
+    "name": "neuron-core/synapse",
     "description": "AI Coding Assistant built entirely in PHP with Neuron AI framework",
     "type": "library",
     "version": "0.1.0",
@@ -13,7 +13,7 @@
         "minicli",
         "cli"
     ],
-    "homepage": "https://github.com/neuron-core/coding-agent",
+    "homepage": "https://github.com/neuron-core/synapse",
     "license": "MIT",
     "authors": [
         {
@@ -22,8 +22,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/neuron-core/coding-agent/issues",
-        "source": "https://github.com/neuron-core/coding-agent"
+        "issues": "https://github.com/neuron-core/synapse/issues",
+        "source": "https://github.com/neuron-core/synapse"
     },
     "minimum-stability": "stable",
     "require": {

@@ -1,4 +1,4 @@
-# Neuron - Coding Agent
+# Synapse - Coding Agent
 
 AI-powered coding assistant built entirely in PHP with [Neuron AI framework](https://neuron-ai.dev).
 
@@ -30,7 +30,7 @@ It runs locally on your machine and provides intelligent assistance for coding, 
 Install Coding Agent globally on your system to use it from any directory:
 
 ```bash
-composer global require neuron-core/coding-agent
+composer global require neuron-core/synapse
 ```
 
 Make sure Composer's global bin directory is in your PATH:
@@ -48,7 +48,7 @@ composer global config bin-dir --absolute
 Install Coding Agent as a dev dependency in your project to avoid system-level configuration:
 
 ```bash
-composer require --dev neuron-core/coding-agent
+composer require --dev neuron-core/synapse
 ```
 
 Then configure a custom composer script in your `composer.json` to run the agent conveniently:
@@ -56,18 +56,18 @@ Then configure a custom composer script in your `composer.json` to run the agent
 ```json
 {
     "scripts": {
-        "neuron": "vendor/bin/neuron"
+        "synapse": "vendor/bin/synapse"
     }
 }
 ```
 
-> **Note**: On native Windows (not WSL/Git Bash), use `".\\vendor\\bin\\neuron"` instead.
+> **Note**: On native Windows (not WSL/Git Bash), use `".\\vendor\\bin\\synapse"` instead.
 
 Now you can run the agent from your project directory:
 
 ```bash
-composer neuron
-composer neuron "your prompt here"
+composer synapse
+composer synapse "your prompt here"
 ```
 
 ## Configuration
@@ -136,10 +136,10 @@ mkdir -p .neuron && printf "{\n}" > .neuron/settings.json
 #### Other Providers
 
 The following providers are also supported with similar configuration:
-- **Cohere**: Set `provider: "cohere"` with `cohere.api_key`
-- **Mistral**: Set `provider: "mistral"` with `mistral.api_key`
-- **Grok (xAI)**: Set `provider: "xai"` with `xai.api_key` (or `grok.api_key`)
-- **Deepseek**: Set `provider: "deepseek"` with `deepseek.api_key`
+- **Cohere**: Set `provider.type: "cohere"` with `cohere.api_key`
+- **Mistral**: Set `provider.type: "mistral"` with `mistral.api_key`
+- **Grok (xAI)**: Set `provider.type: "xai"` with `xai.api_key` (or `grok.api_key`)
+- **Deepseek**: Set `provider.type: "deepseek"` with `deepseek.api_key`
 
 ### MCP Server Configuration
 
@@ -167,7 +167,7 @@ Add Model Context Protocol servers to extend the agent's capabilities:
 }
 ```
 
-**Note**: The `.neuron/settings.json` file should be located in your current working directory when running `neuron`.
+**Note**: The `.synapse/settings.json` file should be located in your current working directory when running `synapse`.
 
 ## Usage
 
@@ -176,7 +176,7 @@ Add Model Context Protocol servers to extend the agent's capabilities:
 Start an interactive chat session:
 
 ```bash
-neuron
+synapse
 ```
 
 ### Single Question
@@ -184,7 +184,7 @@ neuron
 Ask a single question:
 
 ```bash
-neuron "How do I fix this PHP error?"
+synapse "How do I fix this PHP error?"
 ```
 
 ### Working with Projects
@@ -193,7 +193,7 @@ Navigate to your project directory and start chatting:
 
 ```bash
 cd /path/to/your/project
-neuron
+synapse
 ```
 
 The agent can read and analyze files in your current directory to provide context-aware assistance.
@@ -217,8 +217,8 @@ The agent can read and analyze files in your current directory to provide contex
 ### Available Commands
 
 ```bash
-neuron              # Start interactive chat
-neuron "your prompt here"        # Ask a single question
+synapse              # Start interactive chat
+synapse "your prompt here"        # Ask a single question
 ```
 
 ## How It Works
@@ -226,7 +226,7 @@ neuron "your prompt here"        # Ask a single question
 Coding Agent consists of several components:
 
 1. **Neuron AI Framework**: Provides the agent architecture and tool integration
-2. **Settings Module**: Loads configuration from `.neuron/settings.json` with support for multiple AI providers
+2. **Settings Module**: Loads configuration from `.synapse/settings.json` with support for multiple AI providers
 3. **Provider Factory**: Creates provider instances dynamically based on configuration
 4. **Minicli**: Handles the CLI interface and command routing
 
