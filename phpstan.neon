@@ -22,7 +22,6 @@ parameters:
     treatPhpDocTypesAsCertain: false
 
     ignoreErrors:
-        - identifier: generator.valueType
 
     excludePaths:
 
