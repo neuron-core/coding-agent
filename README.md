@@ -30,7 +30,7 @@ It runs locally on your machine and provides intelligent assistance for coding, 
 Install Coding Agent globally on your system to use it from any directory:
 
 ```bash
-composer global require neuron-core/neuron
+composer global require neuron-core/coding-agent
 ```
 
 Make sure Composer's global bin directory is in your PATH:
