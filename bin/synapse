@@ -7,9 +7,6 @@ declare(strict_types=1);
  * Coding Agent - CLI Entry Point
  *
  * AI-powered coding assistant built with Neuron AI framework and Minicli.
- *
- * Usage:
- *   synapse              - Start interactive chat mode
  */
 
 if (php_sapi_name() !== 'cli') {
