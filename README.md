@@ -13,7 +13,7 @@ It runs locally on your machine and provides intelligent assistance for coding, 
 - **🤖 Multi-Provider Support**: Compatible with Anthropic Claude, OpenAI, Gemini, Cohere, Mistral, Ollama, Grok, and Deepseek
 - **📁 Filesystem Integration**: Read, search, and analyze code in any project directory
 - **🔌 MCP Support**: Integrate Model Context Protocol servers for extended capabilities
-- **💻 CLI-Native**: Built with Minicli for a seamless terminal experience
+- **💻 CLI-Native**: Built with [Minicli](https://docs.minicli.dev/) for a seamless terminal experience
 - **🔧 Context-Aware**: Understands project structure before making suggestions
 - **🔒 Secure**: Your code never leaves your local machine (except for AI API calls)
 - **🎯 Coding Focus**: Specialized system prompt for software engineering tasks
