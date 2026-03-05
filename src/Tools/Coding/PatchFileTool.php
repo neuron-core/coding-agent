@@ -24,6 +24,7 @@ use function min;
 use function preg_split;
 use function str_starts_with;
 use function substr;
+use function in_array;
 
 /**
  * Apply a unified diff patch to a file.
@@ -201,9 +202,9 @@ class PatchFileTool extends Tool
 
                 $currentHunk = [
                     'original_start' => (int) $matches[1],
-                    'original_count' => isset($matches[2]) ? (int) $matches[2] : 1,
+                    'original_count' => $matches[2] !== '' ? (int) $matches[2] : 1,
                     'new_start' => (int) $matches[3],
-                    'new_count' => isset($matches[4]) ? (int) $matches[4] : 1,
+                    'new_count' => (int) $matches[4],
                     'lines' => [],
                 ];
             } elseif ($currentHunk !== null && $line !== '') {
@@ -336,8 +337,8 @@ class PatchFileTool extends Tool
             } elseif ($inHunk) {
                 // Close hunk
                 if (count($hunkLines) > 0) {
-                    $originalCount = count(array_filter($hunkLines, fn (array $l): bool => $l['type'] === ' ' || $l['type'] === '-'));
-                    $newCount = count(array_filter($hunkLines, fn (array $l): bool => $l['type'] === ' ' || $l['type'] === '+'));
+                    $originalCount = count(array_filter($hunkLines, fn (array $l): bool => in_array($l['type'], [' ', '-'], true)));
+                    $newCount = count(array_filter($hunkLines, fn (array $l): bool => in_array($l['type'], [' ', '+'], true)));
 
                     $diff .= "@@ -{$hunkStartOriginal},{$originalCount} +{$hunkStartNew},{$newCount} @@\n";
                     foreach ($hunkLines as $line) {
@@ -352,8 +353,8 @@ class PatchFileTool extends Tool
 
         // Close any remaining hunk
         if (count($hunkLines) > 0) {
-            $originalCount = count(array_filter($hunkLines, fn (array $l): bool => $l['type'] === ' ' || $l['type'] === '-'));
-            $newCount = count(array_filter($hunkLines, fn (array $l): bool => $l['type'] === ' ' || $l['type'] === '+'));
+            $originalCount = count(array_filter($hunkLines, fn (array $l): bool => in_array($l['type'], [' ', '-'], true)));
+            $newCount = count(array_filter($hunkLines, fn (array $l): bool => in_array($l['type'], [' ', '+'], true)));
 
             $diff .= "@@ -{$hunkStartOriginal},{$originalCount} +{$hunkStartNew},{$newCount} @@\n";
             foreach ($hunkLines as $line) {

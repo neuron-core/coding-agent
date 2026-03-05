@@ -36,7 +36,6 @@ class PatchFileToolTest extends TestCase
         $tool = new PatchFileTool();
         $result = ($tool)($this->tempFile, 'patch content');
 
-        $this->assertIsString($result);
         $this->assertJson($result);
     }
 
@@ -150,7 +149,6 @@ class PatchFileToolTest extends TestCase
         $tool = new PatchFileTool();
         $properties = $tool->getProperties();
 
-        $this->assertIsArray($properties);
         $this->assertGreaterThanOrEqual(2, count($properties));
     }
 }

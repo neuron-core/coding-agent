@@ -47,7 +47,8 @@ class DiffTerminalThemeTest extends TestCase
 
         $result = $highlighter->parse('', 'diff');
 
-        $this->assertIsString($result);
+        // The parse() method returns string by type
+        $this->assertSame('', $result);
     }
 
     public function testRenderFileHeader(): void

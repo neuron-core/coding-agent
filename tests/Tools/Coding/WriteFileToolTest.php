@@ -36,7 +36,6 @@ class WriteFileToolTest extends TestCase
         $tool = new WriteFileTool();
         $result = ($tool)($this->tempFile, 'content');
 
-        $this->assertIsString($result);
         $this->assertJson($result);
     }
 
@@ -202,7 +201,6 @@ class WriteFileToolTest extends TestCase
         $tool = new WriteFileTool();
         $properties = $tool->getProperties();
 
-        $this->assertIsArray($properties);
         $this->assertGreaterThanOrEqual(2, count($properties));
     }
 }

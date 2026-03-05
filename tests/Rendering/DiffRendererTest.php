@@ -22,7 +22,8 @@ class DiffRendererTest extends TestCase
         $diff = "--- a/file.txt\n+++ b/file.txt\n";
         $result = $this->renderer->render($diff);
 
-        $this->assertIsString($result);
+        // The render() method returns string by type
+        $this->assertNotEmpty($result);
     }
 
     public function testRenderContainsDiffMarkers(): void
@@ -30,7 +31,7 @@ class DiffRendererTest extends TestCase
         $diff = "-old\n+new\n";
         $result = $this->renderer->render($diff);
 
-        // Check that the diff markers are present
+        // Check that diff markers are present
         $this->assertStringContainsString('-', $result);
         $this->assertStringContainsString('+', $result);
         $this->assertStringContainsString('old', $result);
@@ -80,7 +81,7 @@ class DiffRendererTest extends TestCase
         $diff = '';
         $result = $this->renderer->render($diff);
 
-        $this->assertIsString($result);
+        // The render() method returns string by type
         $this->assertEmpty($result);
     }
 }

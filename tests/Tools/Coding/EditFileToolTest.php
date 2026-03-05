@@ -39,7 +39,6 @@ class EditFileToolTest extends TestCase
             ['search' => 'original', 'replace' => 'new'],
         ]);
 
-        $this->assertIsString($result);
         $this->assertJson($result);
     }
 

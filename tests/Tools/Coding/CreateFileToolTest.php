@@ -45,7 +45,7 @@ class CreateFileToolTest extends TestCase
         $tool = new CreateFileTool();
         $result = ($tool)($this->tempFile, 'content');
 
-        $this->assertIsString($result);
+        // The tool __invoke() returns string by type
         $this->assertJson($result);
     }
 
@@ -153,7 +153,7 @@ class CreateFileToolTest extends TestCase
         $tool = new CreateFileTool();
         $properties = $tool->getProperties();
 
-        $this->assertIsArray($properties);
+        // getProperties() returns array by type
         $this->assertCount(2, $properties);
     }
 }

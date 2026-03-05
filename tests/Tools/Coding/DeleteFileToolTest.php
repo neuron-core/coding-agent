@@ -47,7 +47,7 @@ class DeleteFileToolTest extends TestCase
         $tool = new DeleteFileTool();
         $result = ($tool)($this->tempFile);
 
-        $this->assertIsString($result);
+        // The tool __invoke() returns string by type
         $this->assertJson($result);
     }
 
@@ -72,7 +72,7 @@ class DeleteFileToolTest extends TestCase
 
     public function testInvokeReturnsErrorWhenDirectoryNotWritable(): void
     {
-        // Create the file first
+        // Create file first
         file_put_contents($this->tempFile, 'content');
 
         $tool = new DeleteFileTool();
@@ -177,7 +177,7 @@ class DeleteFileToolTest extends TestCase
         $tool = new DeleteFileTool();
         $properties = $tool->getProperties();
 
-        $this->assertIsArray($properties);
+        // getProperties() returns array by type
         $this->assertCount(1, $properties);
     }
 }
