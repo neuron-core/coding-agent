@@ -12,9 +12,9 @@ use NeuronAI\MCP\McpConnector;
 use NeuronCore\Synapse\Settings\SettingsInterface;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Tools\Toolkits\FileSystem\FileSystemToolkit;
-use NeuronCore\Synapse\Tools\CodingToolkit;
 use Exception;
 
+use NeuronCore\Synapse\Tools\BashTool;
 use function array_reduce;
 
 /**
@@ -68,7 +68,7 @@ class CodingAgent extends Agent
     {
         return [
             FileSystemToolkit::make(),
-            CodingToolkit::make(),
+            BashTool::make(),
 
             // Load tools from MCP servers
             ...array_reduce(

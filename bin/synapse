@@ -6,7 +6,7 @@ declare(strict_types=1);
 /**
  * Coding Agent - CLI Entry Point
  *
- * AI-powered coding assistant built with Neuron AI framework and Minicli.
+ * AI-powered coding assistant built with Neuron AI framework and Symfony Console.
  */
 
 if (php_sapi_name() !== 'cli') {
@@ -27,19 +27,10 @@ foreach ($autoloadPaths as $autoloadPath) {
     }
 }
 
-use Minicli\App;
+use NeuronCore\Synapse\Commands\SynapseCommand;
+use Symfony\Component\Console\Application;
 
-// Default to synapse command if no command provided
-if (count($argv) < 2) {
-    $argv[] = 'synapse';
-}
-
-$app = new App([
-    'app_path' => [
-        dirname(__DIR__) . '/src/Command',
-    ],
-    'theme' => '\Default',
-    'debug' => false,
-]);
-
-$app->runCommand($argv);
+$app = new Application('Synapse', '0.1.0');
+$app->add(new SynapseCommand());
+$app->setDefaultCommand('synapse', true);
+$app->run();

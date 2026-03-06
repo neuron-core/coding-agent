@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Tools\Coding;
+namespace NeuronCore\Synapse\Tools;
 
 use NeuronAI\Tools\PropertyType;
 use NeuronAI\Tools\Tool;

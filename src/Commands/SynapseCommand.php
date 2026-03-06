@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Command\Synapse;
+namespace NeuronCore\Synapse\Commands;
 
-use Minicli\Command\CommandController;
-use Minicli\Input;
 use NeuronAI\Chat\Messages\UserMessage;
 use NeuronAI\Exceptions\WorkflowException;
 use NeuronAI\Workflow\Interrupt\ApprovalRequest;
 use NeuronAI\Workflow\Interrupt\WorkflowInterrupt;
 use NeuronCore\Synapse\Agent\CodingAgent;
-use NeuronCore\Synapse\Command\CommandHelper;
 use NeuronCore\Synapse\Rendering\ToolResultRendererRegistry;
 use NeuronCore\Synapse\Settings\Settings;
 use NeuronCore\Synapse\Settings\SettingsInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Exception;
 use Throwable;
 
@@ -31,15 +32,18 @@ use function is_dir;
 use function mkdir;
 use function uniqid;
 use function unlink;
+use function readline;
+use function fgets;
+use function function_exists;
 
 use const JSON_PRETTY_PRINT;
+use const STDIN;
 
-/**
- * ChatCommand - Interactive chat with the Coding Agent.
- *
- * Usage: synapse (starts interactive mode)
- */
-class DefaultController extends CommandController
+#[AsCommand(
+    name: 'synapse',
+    description: 'Synapse Coding Agent - built with Neuron AI framework',
+)]
+class SynapseCommand extends Command
 {
     use CommandHelper;
 
@@ -57,70 +61,62 @@ class DefaultController extends CommandController
 
     protected SettingsInterface $settings;
 
-    /**
-     * Registry for tool result renderers.
-     */
     private ToolResultRendererRegistry $rendererRegistry;
 
+    protected OutputInterface $output;
+
     /**
-     * Handle the chat command.
      * @throws Throwable
      */
-    public function handle(): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // Initialize renderer registry with default renderers
+        $this->output = $output;
+
         $this->rendererRegistry = ToolResultRendererRegistry::withDefaults();
 
-        // Load and validate settings
         $this->settings = new Settings();
 
         if (!$this->settings->fileExists()) {
-            $this->error("Warning: Settings file not found at " . $this->settings->getSettingsPath());
-            $this->error("The agent requires AI provider connection information.");
-            $this->newline();
-            $this->info("Create a settings.json file with your AI provider configuration:");
-            $this->display(json_encode([
+            $output->writeln('<error>Warning: Settings file not found at ' . $this->settings->getSettingsPath() . '</error>');
+            $output->writeln('<error>The agent requires AI provider connection information.</error>');
+            $output->writeln('');
+            $output->writeln('<info>Create a settings.json file with your AI provider configuration:</info>');
+            $output->writeln(json_encode([
                 'provider' => [
                     'type' => 'openai',
                     'api_key' => 'your-api-key',
                     'model' => 'gpt-5',
                 ],
             ], JSON_PRETTY_PRINT));
-            $this->newline();
-            return;
+            $output->writeln('');
+            return Command::FAILURE;
         }
 
         if (!$this->settings->hasValidProvider()) {
-            $this->error("Warning: Settings file is missing valid provider configuration.");
-            $this->error("The 'provider.type' setting is required.");
-            $this->newline();
-            return;
+            $output->writeln('<error>Warning: Settings file is missing valid provider configuration.</error>');
+            $output->writeln("<error>The 'provider.type' setting is required.</error>");
+            $output->writeln('');
+            return Command::FAILURE;
         }
 
         $this->interactiveMode();
+        return Command::SUCCESS;
     }
 
     /**
-     * Interactive mode for continuous conversation.
      * @throws Throwable
      */
     protected function interactiveMode(): void
     {
-        // Initialize agent
         $this->agent = CodingAgent::make($this->settings);
-
-        // Load always-allowed tools from settings (persists across sessions)
         $this->alwaysAllowedActions = $this->settings->getAllowedTools();
 
-        $this->info("=== Synapse Coding Agent - built with Neuron AI framework ===");
-        $this->info("Type 'exit' to end the conversation.");
-        $this->newline();
+        $this->output->writeln('<info>=== Synapse Coding Agent - built with Neuron AI framework ===</info>');
+        $this->output->writeln("<info>Type 'exit' to end the conversation.</info>");
+        $this->output->writeln('');
 
         while (true) {
-            $input = new Input(prompt: "> ");
-            $userInput = $input->read();
-
-            $userInput = trim($userInput);
+            $userInput = trim($this->readInput('> '));
 
             if (in_array($userInput, ['', 'exit'], true)) {
                 break;
@@ -129,40 +125,32 @@ class DefaultController extends CommandController
             $this->processUserInput($userInput);
         }
 
-        $this->info("Goodbye!");
+        $this->output->writeln('<info>Goodbye!</info>');
     }
 
     /**
-     * Process user input in interactive mode.
-     *
-     * @param string $input The user's input message
      * @throws Throwable
      */
     protected function processUserInput(string $input): void
     {
-        $this->newline();
-        $this->out("Thinking...", "default");
+        $this->output->writeln('');
+        $this->output->write('Thinking...');
 
         try {
             $response = $this->agent->chat(new UserMessage($input))->getMessage();
 
-            // Clear the "Thinking..." line
             $this->clearOutput();
-
-            // Print the response
             $this->displayResponse($response->getContent() ?? 'No response received.');
         } catch (WorkflowInterrupt $interrupt) {
             $this->clearOutput();
             $this->handleWorkflowInterrupt($interrupt);
         } catch (Exception $e) {
-            $this->error("Error: " . $e->getMessage());
-            $this->newline();
+            $this->output->writeln('<error>Error: ' . $e->getMessage() . '</error>');
+            $this->output->writeln('');
         }
     }
 
     /**
-     * Handle workflow interrupt for tool approval.
-     *
      * @throws WorkflowInterrupt
      * @throws WorkflowException
      * @throws Throwable
@@ -172,70 +160,56 @@ class DefaultController extends CommandController
         /** @var ApprovalRequest $approvalRequest */
         $approvalRequest = $interrupt->getRequest();
 
-        // Display each action and get user approval
         foreach ($approvalRequest->getPendingActions() as $action) {
-            // Try to render using the renderer registry
             $rendered = $this->rendererRegistry->render($action->name, $action->description);
 
             if ($rendered !== null) {
-                $this->rawOutput($rendered);
+                $this->output->write($rendered);
             } else {
-                // Fallback to simple display
-                $this->display(sprintf("%s( %s )", $action->name, $action->description), true);
+                $this->output->writeln(sprintf('%s( %s )', $action->name, $action->description));
             }
 
-            // Check if this action is always allowed (persists across sessions)
             if (in_array($action->name, $this->alwaysAllowedActions, true)) {
                 $action->approve();
                 continue;
             }
 
-            // Check if this action is session-allowed (current session only)
             if (in_array($action->name, $this->sessionAllowedActions, true)) {
                 $action->approve();
                 continue;
             }
 
-            // Get user decision
             $decision = $this->askDecision();
-
-            // Process the decision
             $this->processDecision($action, $decision);
         }
 
-        // Resume the workflow with updated approvals
-        $this->out("Thinking...", "default");
+        $this->output->write('Thinking...');
         try {
             $response = $this->agent->chat(interrupt: $approvalRequest)->getMessage();
 
             $this->clearOutput();
-
-            // Print the response
             $this->displayResponse($response->getContent() ?? 'No response received.');
         } catch (WorkflowInterrupt $nestedInterrupt) {
             $this->clearOutput();
-            // Handle the next interruption that occurred during resumption
             $this->handleWorkflowInterrupt($nestedInterrupt);
         }
     }
 
     /**
-     * Ask the user for their decision on an action.
-     *
      * @return string The user's decision ('allow', 'session', 'always', or 'reject')
      */
     private function askDecision(): string
     {
-        $this->newline();
-        $this->display("Options:");
-        $this->display("  1) Allow - Execute this action once (or Enter to process)");
-        $this->display("  2) Session allow - Allow this tool for the current session");
-        $this->display("  3) Always allow - Allow this tool permanently (saved to settings.json)");
-        $this->display("  4) Reject - Do not execute this action");
-        $this->newline();
+        $this->output->writeln('');
+        $this->output->writeln('Options:');
+        $this->output->writeln('  1) Allow - Execute this action once (or Enter to process)');
+        $this->output->writeln('  2) Session allow - Allow this tool for the current session');
+        $this->output->writeln('  3) Always allow - Allow this tool permanently (saved to settings.json)');
+        $this->output->writeln('  4) Reject - Do not execute this action');
+        $this->output->writeln('');
+
         while (true) {
-            $decision = (new Input(prompt: 'Enter your choice (1/2/3/4):  '))->read();
-            $decision = strtolower(trim($decision));
+            $decision = strtolower(trim($this->readInput('Enter your choice (1/2/3/4):  ')));
 
             if (in_array($decision, ['', '1', 'allow'], true)) {
                 return 'allow';
@@ -253,16 +227,10 @@ class DefaultController extends CommandController
                 return 'reject';
             }
 
-            $this->error("Invalid choice. Please enter 1, 2, 3, or 4.");
+            $this->output->writeln('<error>Invalid choice. Please enter 1, 2, 3, or 4.</error>');
         }
     }
 
-    /**
-     * Process the user's decision on an action.
-     *
-     * @param object $action The action to process
-     * @param string $decision The user's decision ('allow', 'session', 'always', or 'reject')
-     */
     private function processDecision(object $action, string $decision): void
     {
         if (in_array($decision, ['allow', 'session', 'always'], true)) {
@@ -271,57 +239,31 @@ class DefaultController extends CommandController
             if ($decision === 'session') {
                 $this->sessionAllowedActions[] = $action->name;
             } elseif ($decision === 'always') {
-                // Add to both arrays (session for immediate use, and settings for persistence)
                 $this->alwaysAllowedActions[] = $action->name;
                 $this->sessionAllowedActions[] = $action->name;
 
-                // Persist to settings
                 $this->agent->settings()->addAllowedTool($action->name);
-                $this->info("Tool '{$action->name}' is now always allowed (saved to settings.json).");
+                $this->output->writeln("<info>Tool '{$action->name}' is now always allowed (saved to settings.json).</info>");
             }
         } elseif ($decision === 'reject') {
             $action->reject();
         }
-        $this->newline();
+
+        $this->output->writeln('');
     }
 
-    /**
-     * Display the agent's response with markdown formatting if glow is available.
-     *
-     * @param string $content The markdown-formatted content to display
-     */
     private function displayResponse(string $content): void
     {
-        if ($this->isGlowInstalled()) {
-            // Use glow for beautiful markdown rendering
-            $dir = $this->settings->dirPath();
-            if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
-            }
-            $tempFile = $dir . '/' . uniqid('output_', true) . '.md';
-            file_put_contents($tempFile, $content);
-            passthru("glow " . escapeshellarg($tempFile));
-            @unlink($tempFile);
-        } else {
-            // Fall back to plain display with a recommendation
-            $this->display($content);
-            $this->newline();
-            $this->info("Tip: Install 'glow' for better markdown rendering:");
-            $this->display(" - Ubuntu/Debian: sudo snap install glow");
-            $this->display(" - macOS: brew install glow");
-            $this->display(" - Via cargo: cargo install glow");
-            $this->newline();
-        }
+        $this->output->writeln($content);
     }
 
-    /**
-     * Check if glow is installed on the system.
-     *
-     * @return bool True if glow is available, false otherwise
-     */
-    private function isGlowInstalled(): bool
+    private function readInput(string $prompt): string
     {
-        $output = shell_exec('command -v glow');
-        return $output !== null && trim($output) !== '';
+        if (function_exists('readline')) {
+            return (string) readline($prompt);
+        }
+
+        echo $prompt;
+        return (string) fgets(STDIN);
     }
 }

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace NeuronCore\Synapse\Tests\Tools\Coding;
 
-use NeuronCore\Synapse\Tools\Coding\BashTool;
+use NeuronCore\Synapse\Tools\BashTool;
 use PHPUnit\Framework\TestCase;
-
 use function getcwd;
 use function is_dir;
 use function json_decode;

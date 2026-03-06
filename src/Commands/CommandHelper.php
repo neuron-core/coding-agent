@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Command;
+namespace NeuronCore\Synapse\Commands;
 
 use function str_repeat;
 
@@ -10,6 +10,6 @@ trait CommandHelper
 {
     protected function clearOutput(): void
     {
-        $this->rawOutput("\r" . str_repeat(' ', 50) . "\r");
+        $this->output->write("\r" . str_repeat(' ', 50) . "\r");
     }
 }
