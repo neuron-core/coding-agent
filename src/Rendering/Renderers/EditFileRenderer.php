@@ -20,13 +20,13 @@ use function str_starts_with;
 
 class EditFileRenderer implements ToolRenderer
 {
-    private const string ESC = "\033";
-    private const string RESET = self::ESC . "[0m";
-    private const string RED = self::ESC . "[31;1m";
-    private const string GREEN = self::ESC . "[32;1m";
-    private const string CYAN = self::ESC . "[36;1m";
-    private const string YELLOW = self::ESC . "[33;1m";
-    private const string GRAY = self::ESC . "[90m";
+    private const ESC = "\033";
+    private const RESET = self::ESC . "[0m";
+    private const RED = self::ESC . "[31;1m";
+    private const GREEN = self::ESC . "[32;1m";
+    private const CYAN = self::ESC . "[36;1m";
+    private const YELLOW = self::ESC . "[33;1m";
+    private const GRAY = self::ESC . "[90m";
 
     public function render(string $toolName, string $arguments): string
     {
