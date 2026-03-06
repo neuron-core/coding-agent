@@ -18,7 +18,8 @@ class AgentOrchestrator
     public function __construct(
         private readonly CodingAgent $agent,
         private readonly EventDispatcherInterface $dispatcher,
-    ) {}
+    ) {
+    }
 
     /**
      * @throws Throwable

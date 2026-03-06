@@ -14,7 +14,6 @@ use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Tools\Toolkits\FileSystem\FileSystemToolkit;
 use Exception;
 
-use NeuronCore\Synapse\Tools\BashTool;
 use function array_reduce;
 
 /**
@@ -68,7 +67,6 @@ class CodingAgent extends Agent
     {
         return [
             FileSystemToolkit::make(),
-            BashTool::make(),
 
             // Load tools from MCP servers
             ...array_reduce(

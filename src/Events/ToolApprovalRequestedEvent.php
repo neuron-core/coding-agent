@@ -8,5 +8,7 @@ use NeuronAI\Workflow\Interrupt\ApprovalRequest;
 
 class ToolApprovalRequestedEvent
 {
-    public function __construct(public readonly ApprovalRequest $approvalRequest) {}
+    public function __construct(public readonly ApprovalRequest $approvalRequest)
+    {
+    }
 }

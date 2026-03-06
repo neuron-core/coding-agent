@@ -6,5 +6,7 @@ namespace NeuronCore\Synapse\Events;
 
 class AgentResponseEvent
 {
-    public function __construct(public readonly string $content) {}
+    public function __construct(public readonly string $content)
+    {
+    }
 }

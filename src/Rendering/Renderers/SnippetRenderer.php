@@ -17,7 +17,9 @@ class SnippetRenderer implements ToolRenderer
     /**
      * @param string[] $keys Argument keys to extract and display, in order
      */
-    public function __construct(private readonly array $keys) {}
+    public function __construct(private readonly array $keys)
+    {
+    }
 
     public function render(string $toolName, string $arguments): string
     {
@@ -30,7 +32,7 @@ class SnippetRenderer implements ToolRenderer
             }
         }
 
-        $display = $parts ? implode(', ', $parts) : $arguments;
+        $display = $parts !== [] ? implode(', ', $parts) : $arguments;
 
         return sprintf("● %s( %s )\n", $toolName, $display);
     }

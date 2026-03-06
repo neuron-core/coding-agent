@@ -69,9 +69,9 @@ class SynapseCommand extends Command
         $dispatcher = new EventDispatcher();
         $listener = new CliOutputListener($output, $settings, ToolRendererMap::default());
 
-        $dispatcher->subscribe(AgentThinkingEvent::class, [$listener, 'onThinking']);
-        $dispatcher->subscribe(AgentResponseEvent::class, [$listener, 'onResponse']);
-        $dispatcher->subscribe(ToolApprovalRequestedEvent::class, [$listener, 'onToolApprovalRequested']);
+        $dispatcher->subscribe(AgentThinkingEvent::class, $listener->onThinking(...));
+        $dispatcher->subscribe(AgentResponseEvent::class, $listener->onResponse(...));
+        $dispatcher->subscribe(ToolApprovalRequestedEvent::class, $listener->onToolApprovalRequested(...));
 
         $orchestrator = new AgentOrchestrator(CodingAgent::make($settings), $dispatcher);
 

@@ -13,7 +13,9 @@ class ToolRendererMap
     /** @var array<string, ToolRenderer> */
     private array $map = [];
 
-    public function __construct(private readonly ToolRenderer $fallback) {}
+    public function __construct(private readonly ToolRenderer $fallback)
+    {
+    }
 
     public function register(string $toolName, ToolRenderer $renderer): self
     {
@@ -33,19 +35,17 @@ class ToolRendererMap
 
         return (new self(new GenericRenderer()))
             // FileSystemToolkit read-only tools
-            ->register('read_file',                  new SnippetRenderer(['file_path']))
-            ->register('preview_file',               new SnippetRenderer(['file_path']))
-            ->register('parse_file',                 new SnippetRenderer(['file_path']))
-            ->register('grep_file_content',          new SnippetRenderer(['pattern', 'file_path']))
-            ->register('glob_path',                  new SnippetRenderer(['pattern', 'directory']))
+            ->register('read_file', new SnippetRenderer(['file_path']))
+            ->register('preview_file', new SnippetRenderer(['file_path']))
+            ->register('parse_file', new SnippetRenderer(['file_path']))
+            ->register('grep_file_content', new SnippetRenderer(['pattern', 'file_path']))
+            ->register('glob_path', new SnippetRenderer(['pattern', 'directory']))
             ->register('describe_directory_content', new SnippetRenderer(['directory']))
             // Execution
-            ->register('bash',                       new SnippetRenderer(['command']))
+            ->register('bash', new SnippetRenderer(['command']))
             // File change tools (CodingToolkit)
-            ->register('write_file',                 $fileChange)
-            ->register('edit_file',                  $fileChange)
-            ->register('patch_file',                 $fileChange)
-            ->register('create_file',                $fileChange)
-            ->register('delete_file',                $fileChange);
+            ->register('write_file', $fileChange)
+            ->register('edit_file', $fileChange)
+            ->register('delete_file', $fileChange);
     }
 }

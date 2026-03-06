@@ -15,13 +15,14 @@ use function fwrite;
 use function json_decode;
 use function shell_exec;
 use function sprintf;
-use function str_replace;
 use function stream_get_meta_data;
 use function tmpfile;
 
 class FileChangeRenderer implements ToolRenderer
 {
-    public function __construct(private readonly DiffRenderer $diffRenderer) {}
+    public function __construct(private readonly DiffRenderer $diffRenderer)
+    {
+    }
 
     public function render(string $toolName, string $arguments): string
     {

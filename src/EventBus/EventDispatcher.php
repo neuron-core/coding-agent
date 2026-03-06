@@ -8,8 +8,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
 
-use function get_class;
-
 class EventDispatcher implements EventDispatcherInterface, ListenerProviderInterface
 {
     private array $listeners = [];
@@ -21,7 +19,7 @@ class EventDispatcher implements EventDispatcherInterface, ListenerProviderInter
 
     public function getListenersForEvent(object $event): iterable
     {
-        return $this->listeners[get_class($event)] ?? [];
+        return $this->listeners[$event::class] ?? [];
     }
 
     public function dispatch(object $event): object
