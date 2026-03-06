@@ -86,8 +86,6 @@ class SynapseCommand extends Command
         $output->writeln("<fg=cyan;options=bold>         |___/            |_|</>");
         $output->writeln("");
         $output->writeln("<fg=white;options=bold> Coding Agent  •  Powered by Neuron AI framework (https://docs.neuron-ai.dev) </>");
-        $output->writeln("");
-        $output->writeln("<comment>Type 'exit' to end the conversation.</comment>");
         $output->writeln("\n");
 
         while (true) {
