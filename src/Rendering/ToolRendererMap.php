@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NeuronCore\Synapse\Rendering;
 
+use NeuronCore\Synapse\Rendering\Renderers\EditFileRenderer;
 use NeuronCore\Synapse\Rendering\Renderers\FileChangeRenderer;
 use NeuronCore\Synapse\Rendering\Renderers\GenericRenderer;
 use NeuronCore\Synapse\Rendering\Renderers\SnippetRenderer;
@@ -34,18 +35,15 @@ class ToolRendererMap
         $fileChange = new FileChangeRenderer($diffRenderer);
 
         return (new self(new GenericRenderer()))
-            // FileSystemToolkit read-only tools
             ->register('read_file', new SnippetRenderer(['file_path']))
             ->register('preview_file', new SnippetRenderer(['file_path']))
             ->register('parse_file', new SnippetRenderer(['file_path']))
             ->register('grep_file_content', new SnippetRenderer(['pattern', 'file_path']))
             ->register('glob_path', new SnippetRenderer(['pattern', 'directory']))
             ->register('describe_directory_content', new SnippetRenderer(['directory']))
-            // Execution
             ->register('bash', new SnippetRenderer(['command']))
-            // File change tools (CodingToolkit)
+            ->register('edit_file', new EditFileRenderer($diffRenderer))
             ->register('write_file', $fileChange)
-            ->register('edit_file', $fileChange)
             ->register('delete_file', $fileChange);
     }
 }
