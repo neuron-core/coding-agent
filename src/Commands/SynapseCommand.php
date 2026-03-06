@@ -78,10 +78,10 @@ class SynapseCommand extends Command
         $output->writeln("\n");
         $output->writeln("<fg=cyan;options=bold>   _____</>");
         $output->writeln("<fg=cyan;options=bold>  / ____|</>");
-        $output->writeln("<fg=cyan;options=bold> | (___  _   _ _ __   __ _ _ __  ___  ___ </>");
-        $output->writeln("<fg=cyan;options=bold>  \___ \| | | | '_ \ / _` | '_ \/ __|/ _ \</>");
-        $output->writeln("<fg=cyan;options=bold>  ____) | |_| | | | | (_| | |_) \__ \  __/</>");
-        $output->writeln("<fg=cyan;options=bold> |_____/ \__, |_| |_|\__,_| .__/|___/\___|</>");
+        $output->writeln("<fg=cyan;options=bold> | (___  _   _ _ __   __ _ _ __  ___  ___  </>");
+        $output->writeln("<fg=cyan;options=bold>  \___ \| | | | '_ \ / _` | '_ \/ __|/ _ \ </>");
+        $output->writeln("<fg=cyan;options=bold>  ____) | |_| | | | | (_| | |_) \__ \  __/ </>");
+        $output->writeln("<fg=cyan;options=bold> |_____/ \__, |_| |_|\__,_| .__/|___/\___| </>");
         $output->writeln("<fg=cyan;options=bold>          __/ |           | |</>");
         $output->writeln("<fg=cyan;options=bold>         |___/            |_|</>");
         $output->writeln("");
