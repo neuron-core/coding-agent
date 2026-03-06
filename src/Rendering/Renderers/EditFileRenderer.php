@@ -78,11 +78,11 @@ class EditFileRenderer implements ToolRenderer
 
         foreach ($lines as $line) {
             if (str_starts_with($line, '---') || str_starts_with($line, '+++')) {
-                // File headers - yellow
-                $colored[] = self::YELLOW . $line . self::RESET;
+                // Skip file headers
+                continue;
             } elseif (str_starts_with($line, '@@')) {
-                // Hunk header - cyan
-                $colored[] = self::CYAN . $line . self::RESET;
+                // Skip hunk headers
+                continue;
             } elseif (str_starts_with($line, '-')) {
                 // Deletions - red
                 $colored[] = self::RED . $line . self::RESET;
@@ -93,6 +93,7 @@ class EditFileRenderer implements ToolRenderer
                 // Context - gray
                 $colored[] = self::GRAY . $line . self::RESET;
             } else {
+                // Keep other lines (like "No newline at end of file")
                 $colored[] = $line;
             }
         }
