@@ -31,6 +31,6 @@ use NeuronCore\Synapse\Commands\SynapseCommand;
 use Symfony\Component\Console\Application;
 
 $app = new Application('Synapse', '0.1.0');
-$app->add(new SynapseCommand());
+$app->addCommand(new SynapseCommand());
 $app->setDefaultCommand('synapse', true);
 $app->run();
