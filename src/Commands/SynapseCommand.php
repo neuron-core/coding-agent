@@ -84,8 +84,6 @@ class SynapseCommand extends Command
         $output->writeln("<fg=cyan;options=bold> |_____/ \__, |_| |_|\__,_| .__/|___/\___|</>");
         $output->writeln("<fg=cyan;options=bold>          __/ |           | |</>");
         $output->writeln("<fg=cyan;options=bold>         |___/            |_|</>");
-        $output->writeln("<fg=cyan;options=bold></>");
-        $output->writeln("<fg=cyan;options=bold></>");
         $output->writeln("");
         $output->writeln("<fg=white;options=bold>   Coding Agent  •  Powered by Neuron AI</>");
         $output->writeln("");
