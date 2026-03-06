@@ -62,7 +62,7 @@ class SettingsTest extends TestCase
 
     public function testLoadSettingsFromDefaultPath(): void
     {
-        $defaultPath = getcwd() . '/.synapse/settings.json';
+        $defaultPath = getcwd() . '/.maestro/settings.json';
 
         if (file_exists($defaultPath)) {
             $original = file_get_contents($defaultPath);

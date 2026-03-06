@@ -27,7 +27,7 @@ use function dirname;
 use const JSON_PRETTY_PRINT;
 
 /**
- * Loads and manages agent configuration from .synapse/settings.json.
+ * Loads and manages agent configuration from .maestro/settings.json.
  */
 class Settings implements SettingsInterface
 {
@@ -37,7 +37,7 @@ class Settings implements SettingsInterface
 
     public function __construct(?string $settingsPath = null, protected ?ProviderFactoryInterface $providerFactory = new ProviderFactory())
     {
-        $this->settingsPath = $settingsPath ?? getcwd() . '/.synapse/settings.json';
+        $this->settingsPath = $settingsPath ?? getcwd() . '/.maestro/settings.json';
         $this->load();
     }
 

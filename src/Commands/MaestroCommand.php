@@ -31,10 +31,10 @@ use const JSON_PRETTY_PRINT;
 use const STDIN;
 
 #[AsCommand(
-    name: 'synapse',
+    name: 'maestro',
     description: 'Synapse Coding Agent - built with Neuron AI framework',
 )]
-class SynapseCommand extends Command
+class MaestroCommand extends Command
 {
     /**
      * @throws Throwable

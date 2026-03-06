@@ -27,10 +27,10 @@ foreach ($autoloadPaths as $autoloadPath) {
     }
 }
 
-use NeuronCore\Synapse\Commands\SynapseCommand;
+use NeuronCore\Synapse\Commands\MaestroCommand;
 use Symfony\Component\Console\Application;
 
-$app = new Application('Synapse', '0.1.0');
-$app->addCommand(new SynapseCommand());
-$app->setDefaultCommand('synapse', true);
+$app = new Application('Maestro', '1.x');
+$app->addCommand(new MaestroCommand());
+$app->setDefaultCommand('maestro', true);
 $app->run();

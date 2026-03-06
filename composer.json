@@ -48,7 +48,7 @@
         }
     },
     "bin": [
-        "bin/synapse"
+        "bin/maestro"
     ],
     "scripts": {
         "analyse": [

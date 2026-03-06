@@ -93,7 +93,7 @@ class ProviderFactory implements ProviderFactoryInterface
     {
         $apiKey = $settings['api_key']
             ?? throw new RuntimeException(
-                'Anthropic API key is not configured. Add "api_key" to provider object in .synapse/settings.json.'
+                'Anthropic API key is not configured. Add "api_key" to provider object in .maestro/settings.json.'
             );
 
         return new Anthropic(
@@ -107,7 +107,7 @@ class ProviderFactory implements ProviderFactoryInterface
     {
         $apiKey = $settings['api_key']
             ?? throw new RuntimeException(
-                'OpenAI API key is not configured. Add "api_key" to provider object in .synapse/settings.json.'
+                'OpenAI API key is not configured. Add "api_key" to provider object in .maestro/settings.json.'
             );
 
         $parameters = [];
@@ -126,7 +126,7 @@ class ProviderFactory implements ProviderFactoryInterface
     {
         $apiKey = $settings['api_key']
             ?? throw new RuntimeException(
-                'Gemini API key is not configured. Add "api_key" to provider object in .synapse/settings.json.'
+                'Gemini API key is not configured. Add "api_key" to provider object in .maestro/settings.json.'
             );
 
         $parameters = [];
@@ -145,7 +145,7 @@ class ProviderFactory implements ProviderFactoryInterface
     {
         $apiKey = $settings['api_key']
             ?? throw new RuntimeException(
-                'Cohere API key is not configured. Add "api_key" to provider object in .synapse/settings.json.'
+                'Cohere API key is not configured. Add "api_key" to provider object in .maestro/settings.json.'
             );
 
         $parameters = [];
@@ -164,7 +164,7 @@ class ProviderFactory implements ProviderFactoryInterface
     {
         $apiKey = $settings['api_key']
             ?? throw new RuntimeException(
-                'Mistral API key is not configured. Add "api_key" to provider object in .synapse/settings.json.'
+                'Mistral API key is not configured. Add "api_key" to provider object in .maestro/settings.json.'
             );
 
         $parameters = [];
@@ -197,7 +197,7 @@ class ProviderFactory implements ProviderFactoryInterface
     {
         $apiKey = $settings['api_key']
             ?? throw new RuntimeException(
-                'xAI API key is not configured. Add "api_key" to provider object in .synapse/settings.json.'
+                'xAI API key is not configured. Add "api_key" to provider object in .maestro/settings.json.'
             );
 
         $parameters = [];
@@ -216,7 +216,7 @@ class ProviderFactory implements ProviderFactoryInterface
     {
         $apiKey = $settings['api_key']
             ?? throw new RuntimeException(
-                'Deepseek API key is not configured. Add "api_key" to provider object in .synapse/settings.json.'
+                'Deepseek API key is not configured. Add "api_key" to provider object in .maestro/settings.json.'
             );
 
         $parameters = [];
