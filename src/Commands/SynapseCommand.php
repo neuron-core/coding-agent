@@ -75,9 +75,18 @@ class SynapseCommand extends Command
 
         $orchestrator = new AgentOrchestrator(CodingAgent::make($settings), $dispatcher);
 
-        $output->writeln("\n\n<info>=|=|= Synapse Coding Agent - built with Neuron AI framework =|=|=</info>");
-        $output->writeln("<info>Type 'exit' to end the conversation.</info>");
-        $output->writeln("\n\n");
+        $output->writeln("\n");
+        $output->writeln("<fg=cyan;options=bold>                ____  _       __</>");
+        $output->writeln("<fg=cyan;options=bold>   ____  ___  / __ \\(_)___ _/ /___  ____</>");
+        $output->writeln("<fg=cyan;options=bold>  / __ \\/ _ \\/ /_/ / / __ `/ __/ / / / __ \\/</>");
+        $output->writeln("<fg=cyan;options=bold> / /_/ /  __/ _, _/ / /_/ / /_/ /_/ / /_/ /</>");
+        $output->writeln("<fg=cyan;options=bold>/ .___/\\___/_/ |_|_/\\__,_/\\__/\\__,_/\\____/</>");
+        $output->writeln("<fg=cyan;options=bold>/_/</>");
+        $output->writeln("");
+        $output->writeln("<fg=white;options=bold>   Coding Agent  •  Powered by Neuron AI</>");
+        $output->writeln("");
+        $output->writeln("<comment>Type 'exit' to end the conversation.</comment>");
+        $output->writeln("\n");
 
         while (true) {
             $userInput = trim($this->readInput('> '));
