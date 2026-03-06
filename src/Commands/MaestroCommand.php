@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Commands;
+namespace NeuronCore\Maestro\Commands;
 
 use Exception;
-use NeuronCore\Synapse\Agent\CodingAgent;
-use NeuronCore\Synapse\EventBus\EventDispatcher;
-use NeuronCore\Synapse\Events\AgentResponseEvent;
-use NeuronCore\Synapse\Events\AgentThinkingEvent;
-use NeuronCore\Synapse\Events\ToolApprovalRequestedEvent;
-use NeuronCore\Synapse\Listeners\CliOutputListener;
-use NeuronCore\Synapse\Orchestrator\AgentOrchestrator;
-use NeuronCore\Synapse\Rendering\ToolRendererMap;
-use NeuronCore\Synapse\Settings\Settings;
+use NeuronCore\Maestro\Agent\CodingAgent;
+use NeuronCore\Maestro\EventBus\EventDispatcher;
+use NeuronCore\Maestro\Events\AgentResponseEvent;
+use NeuronCore\Maestro\Events\AgentThinkingEvent;
+use NeuronCore\Maestro\Events\ToolApprovalRequestedEvent;
+use NeuronCore\Maestro\Listeners\CliOutputListener;
+use NeuronCore\Maestro\Orchestrator\AgentOrchestrator;
+use NeuronCore\Maestro\Rendering\ToolRendererMap;
+use NeuronCore\Maestro\Settings\Settings;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

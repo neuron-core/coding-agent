@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Rendering\Renderers;
+namespace NeuronCore\Maestro\Rendering\Renderers;
 
-use NeuronCore\Synapse\Rendering\ToolRenderer;
+use NeuronCore\Maestro\Rendering\ToolRenderer;
 
 use function implode;
 use function is_string;

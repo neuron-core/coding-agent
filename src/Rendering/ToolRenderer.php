@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Rendering;
+namespace NeuronCore\Maestro\Rendering;
 
 interface ToolRenderer
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Tests\Settings;
+namespace NeuronCore\Maestro\Tests\Settings;
 
 use NeuronAI\Providers\AIProviderInterface;
-use NeuronCore\Synapse\Settings\ProviderFactory;
-use NeuronCore\Synapse\Settings\ProviderFactoryInterface;
+use NeuronCore\Maestro\Settings\ProviderFactory;
+use NeuronCore\Maestro\Settings\ProviderFactoryInterface;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 

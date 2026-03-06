@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Tests\Console;
+namespace NeuronCore\Maestro\Tests\Console;
 
-use NeuronCore\Synapse\Console\SelectMenuHelper;
+use NeuronCore\Maestro\Console\SelectMenuHelper;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\BufferedOutput;
 

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Agent;
+namespace NeuronCore\Maestro\Agent;
 
 use NeuronAI\Agent\Agent;
 use NeuronAI\Agent\Middleware\ToolApproval;
 use NeuronAI\Agent\Nodes\ToolNode;
 use NeuronAI\Exceptions\WorkflowException;
 use NeuronAI\MCP\McpConnector;
-use NeuronCore\Synapse\Settings\SettingsInterface;
+use NeuronCore\Maestro\Settings\SettingsInterface;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Tools\Toolkits\FileSystem\FileSystemToolkit;
 use Exception;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Tests\Rendering\Renderers;
+namespace NeuronCore\Maestro\Tests\Rendering\Renderers;
 
-use NeuronCore\Synapse\Rendering\Renderers\GenericRenderer;
-use NeuronCore\Synapse\Rendering\ToolRenderer;
+use NeuronCore\Maestro\Rendering\Renderers\GenericRenderer;
+use NeuronCore\Maestro\Rendering\ToolRenderer;
 use PHPUnit\Framework\TestCase;
 
 class GenericRendererTest extends TestCase

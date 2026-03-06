@@ -1,5 +1,5 @@
 {
-    "name": "neuron-core/synapse",
+    "name": "neuron-core/maestro",
     "description": "AI Coding Assistant built entirely in PHP with Neuron AI framework",
     "type": "library",
     "keywords": [
@@ -11,7 +11,7 @@
         "symfony",
         "cli"
     ],
-    "homepage": "https://github.com/neuron-core/synapse",
+    "homepage": "https://github.com/neuron-core/maestro",
     "license": "MIT",
     "authors": [
         {
@@ -20,8 +20,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/neuron-core/synapse/issues",
-        "source": "https://github.com/neuron-core/synapse"
+        "issues": "https://github.com/neuron-core/maestro/issues",
+        "source": "https://github.com/neuron-core/maestro"
     },
     "minimum-stability": "stable",
     "require": {
@@ -39,12 +39,12 @@
     },
     "autoload": {
         "psr-4": {
-            "NeuronCore\\Synapse\\": "src/"
+            "NeuronCore\\Maestro\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "NeuronCore\\Synapse\\Tests\\": "tests/"
+            "NeuronCore\\Maestro\\Tests\\": "tests/"
         }
     },
     "bin": [

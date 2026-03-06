@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\EventBus;
+namespace NeuronCore\Maestro\EventBus;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;

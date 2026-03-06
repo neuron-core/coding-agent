@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Tests\Rendering;
+namespace NeuronCore\Maestro\Tests\Rendering;
 
-use NeuronCore\Synapse\Rendering\ToolRenderer;
-use NeuronCore\Synapse\Rendering\ToolRendererMap;
+use NeuronCore\Maestro\Rendering\ToolRenderer;
+use NeuronCore\Maestro\Rendering\ToolRendererMap;
 use PHPUnit\Framework\TestCase;
 
 class ToolRendererMapTest extends TestCase

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Rendering;
+namespace NeuronCore\Maestro\Rendering;
 
-use NeuronCore\Synapse\Rendering\Renderers\EditFileRenderer;
-use NeuronCore\Synapse\Rendering\Renderers\FileChangeRenderer;
-use NeuronCore\Synapse\Rendering\Renderers\GenericRenderer;
-use NeuronCore\Synapse\Rendering\Renderers\SnippetRenderer;
+use NeuronCore\Maestro\Rendering\Renderers\EditFileRenderer;
+use NeuronCore\Maestro\Rendering\Renderers\FileChangeRenderer;
+use NeuronCore\Maestro\Rendering\Renderers\GenericRenderer;
+use NeuronCore\Maestro\Rendering\Renderers\SnippetRenderer;
 
 class ToolRendererMap
 {

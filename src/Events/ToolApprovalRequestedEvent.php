@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Events;
+namespace NeuronCore\Maestro\Events;
 
 use NeuronAI\Workflow\Interrupt\ApprovalRequest;
 

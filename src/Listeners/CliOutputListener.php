@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Listeners;
+namespace NeuronCore\Maestro\Listeners;
 
 use NeuronAI\Workflow\Interrupt\Action;
-use NeuronCore\Synapse\Console\SelectMenuHelper;
-use NeuronCore\Synapse\Events\AgentResponseEvent;
-use NeuronCore\Synapse\Events\AgentThinkingEvent;
-use NeuronCore\Synapse\Events\ToolApprovalRequestedEvent;
-use NeuronCore\Synapse\Rendering\ToolRendererMap;
-use NeuronCore\Synapse\Settings\SettingsInterface;
+use NeuronCore\Maestro\Console\SelectMenuHelper;
+use NeuronCore\Maestro\Events\AgentResponseEvent;
+use NeuronCore\Maestro\Events\AgentThinkingEvent;
+use NeuronCore\Maestro\Events\ToolApprovalRequestedEvent;
+use NeuronCore\Maestro\Rendering\ToolRendererMap;
+use NeuronCore\Maestro\Settings\SettingsInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

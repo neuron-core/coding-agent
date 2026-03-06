@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Console;
+namespace NeuronCore\Maestro\Console;
 
 use Symfony\Component\Console\Cursor;
 use Symfony\Component\Console\Output\OutputInterface;

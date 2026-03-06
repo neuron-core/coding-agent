@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace NeuronCore\Synapse\Settings;
+namespace NeuronCore\Maestro\Settings;
 
 use NeuronAI\Providers\AIProviderInterface;
 use RuntimeException;
