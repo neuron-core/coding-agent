@@ -33,7 +33,7 @@ class SnippetRenderer implements ToolRenderer
             }
         }
 
-        $display = $parts !== [] ? "\n".implode("\n\t", $parts)."\n" : $arguments;
+        $display = $parts !== [] ? "\n\t".implode("\n\t", $parts)."\n" : $arguments;
 
         return sprintf("● %s(%s)\n", $toolName, $display);
     }
