@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NeuronCore\Maestro\Rendering\Renderers;
 
 use NeuronCore\Maestro\Rendering\ToolRenderer;
+use NeuronCore\Maestro\Terminal\Color;
 
 use function implode;
 use function is_string;
@@ -28,7 +29,7 @@ class SnippetRenderer implements ToolRenderer
         $parts = [];
         foreach ($this->keys as $key) {
             if (isset($args[$key])) {
-                $parts[] = "<info>{$key}:</info> " . (is_string($args[$key]) ? $args[$key] : json_encode($args[$key]));
+                $parts[] = Color::cyan("{$key}:") . ' ' . (is_string($args[$key]) ? $args[$key] : json_encode($args[$key]));
             }
         }
 

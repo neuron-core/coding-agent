@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NeuronCore\Maestro\Console;
 
+use NeuronCore\Maestro\Terminal\Color;
 use Symfony\Component\Console\Cursor;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Terminal;
@@ -165,7 +166,10 @@ class SelectMenuHelper
                 return $index;
             }
 
-            $this->output->writeln(sprintf('<error>Invalid choice. Enter a number between 1 and %d.</error>', $max));
+            $this->output->writeln(sprintf(
+                Color::red('Invalid choice. Enter a number between 1 and %d.'),
+                $max
+            ));
         }
     }
 
@@ -178,7 +182,7 @@ class SelectMenuHelper
 
         foreach ($options as $i => $option) {
             if ($i === $selected) {
-                $this->output->writeln(sprintf('  <info>> %s</info>', $option));
+                $this->output->writeln(sprintf('  %s', Color::cyan('> ' . $option)));
             } else {
                 $this->output->writeln(sprintf('    %s', $option));
             }

@@ -14,6 +14,7 @@ use NeuronCore\Maestro\Listeners\CliOutputListener;
 use NeuronCore\Maestro\Orchestrator\AgentOrchestrator;
 use NeuronCore\Maestro\Rendering\ToolRendererMap;
 use NeuronCore\Maestro\Settings\Settings;
+use NeuronCore\Maestro\Terminal\Color;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,10 +45,10 @@ class MaestroCommand extends Command
         $settings = new Settings();
 
         if (!$settings->fileExists()) {
-            $output->writeln('<error>Warning: Settings file not found at ' . $settings->getSettingsPath() . '</error>');
-            $output->writeln('<error>The agent requires AI provider connection information.</error>');
+            $output->writeln(Color::red('Warning: Settings file not found at ' . $settings->getSettingsPath()));
+            $output->writeln(Color::red('The agent requires AI provider connection information.'));
             $output->writeln('');
-            $output->writeln('<info>Create a settings.json file with your AI provider configuration:</info>');
+            $output->writeln(Color::cyan('Create a settings.json file with your AI provider configuration:'));
             $output->writeln(json_encode([
                 'provider' => [
                     'type' => 'openai',
@@ -60,8 +61,8 @@ class MaestroCommand extends Command
         }
 
         if (!$settings->hasValidProvider()) {
-            $output->writeln('<error>Warning: Settings file is missing valid provider configuration.</error>');
-            $output->writeln("<error>The 'provider.type' setting is required.</error>");
+            $output->writeln(Color::red('Warning: Settings file is missing valid provider configuration.'));
+            $output->writeln(Color::red("The 'provider.type' setting is required."));
             $output->writeln('');
             return Command::FAILURE;
         }
@@ -76,14 +77,14 @@ class MaestroCommand extends Command
         $orchestrator = new AgentOrchestrator(CodingAgent::make($settings), $dispatcher);
 
         $output->writeln("\n");
-        $output->writeln("<fg=cyan;options=bold>  __  __                 _             </>");
-        $output->writeln("<fg=cyan;options=bold> |  \/  |               | |            </>");
-        $output->writeln("<fg=cyan;options=bold> | \  / | __ _  ___  ___| |_ _ __ ___  </>");
-        $output->writeln("<fg=cyan;options=bold> | |\/| |/ _` |/ _ \/ __| __| '__/ _ \ </>");
-        $output->writeln("<fg=cyan;options=bold> | |  | | (_| |  __/\__ \ |_| | | (_) |</>");
-        $output->writeln("<fg=cyan;options=bold> |_|  |_|\__,_|\___||___/\__|_|  \___/ </>");
+        $output->writeln((string) Color::cyan("  __  __                 _             ")->bold());
+        $output->writeln((string) Color::cyan(" |  \\/  |               | |            ")->bold());
+        $output->writeln((string) Color::cyan(" | \\  / | __ _  ___  ___| |_ _ __ ___  ")->bold());
+        $output->writeln((string) Color::cyan(" | |\\/| |/ _` |/ _ \\/ __| __| '__/ _ \\ ")->bold());
+        $output->writeln((string) Color::cyan(" | |  | | (_| |  __/\\__ \\ |_| | | (_) |")->bold());
+        $output->writeln((string) Color::cyan(" |_|  |_|\\__,_|\\___||___/\\__|_|  \\___/ ")->bold());
         $output->writeln("");
-        $output->writeln("<fg=white;options=bold> Coding Agent  •  Powered by Neuron AI framework (https://docs.neuron-ai.dev) </>");
+        $output->writeln((string) Color::white(" Coding Agent  •  Powered by Neuron AI framework (https://docs.neuron-ai.dev) ")->bold());
         $output->writeln("\n");
 
         while (true) {
@@ -96,12 +97,12 @@ class MaestroCommand extends Command
             try {
                 $orchestrator->chat($userInput);
             } catch (Exception $e) {
-                $output->writeln('<error>Error: ' . $e->getMessage() . '</error>');
+                $output->writeln(Color::red('Error: ' . $e->getMessage()));
                 $output->writeln('');
             }
         }
 
-        $output->writeln('<info>Goodbye!</info>');
+        $output->writeln(Color::cyan('Goodbye!'));
         return Command::SUCCESS;
     }
 

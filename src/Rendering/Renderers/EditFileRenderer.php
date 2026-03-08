@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NeuronCore\Maestro\Rendering\Renderers;
 
 use NeuronCore\Maestro\Rendering\ToolRenderer;
+use NeuronCore\Maestro\Terminal\Color;
 
 use function escapeshellarg;
 use function fclose;
@@ -20,14 +21,6 @@ use function str_starts_with;
 
 class EditFileRenderer implements ToolRenderer
 {
-    protected const ESC = "\033";
-    protected const RESET = self::ESC . "[0m";
-    protected const RED = self::ESC . "[31;1m";
-    protected const GREEN = self::ESC . "[32;1m";
-    protected const CYAN = self::ESC . "[36;1m";
-    protected const YELLOW = self::ESC . "[33;1m";
-    protected const GRAY = self::ESC . "[90m";
-
     public function render(string $toolName, string $arguments): string
     {
         $args = json_decode($arguments, true) ?? [];
@@ -45,7 +38,7 @@ class EditFileRenderer implements ToolRenderer
         $diff = $this->generateSearchReplaceDiff($search, $replace);
 
         if ($diff === '') {
-            return $header . "<info>No changes (search and replace are identical)</info>\n";
+            return $header . Color::cyan("No changes (search and replace are identical)") . "\n";
         }
 
         // Apply ANSI colors directly to the diff
@@ -91,13 +84,13 @@ class EditFileRenderer implements ToolRenderer
             }
             if (str_starts_with($line, '-')) {
                 // Deletions - red
-                $colored[] = self::RED . $line . self::RESET;
+                $colored[] = (string) Color::red($line);
             } elseif (str_starts_with($line, '+')) {
                 // Additions - green
-                $colored[] = self::GREEN . $line . self::RESET;
+                $colored[] = (string) Color::green($line);
             } elseif (str_starts_with($line, ' ')) {
                 // Context - gray
-                $colored[] = self::GRAY . $line . self::RESET;
+                $colored[] = (string) Color::gray($line);
             } elseif ($line !== '') {
                 // Keep other non-empty lines
                 $colored[] = $line;

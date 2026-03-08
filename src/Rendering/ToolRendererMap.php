@@ -35,11 +35,9 @@ class ToolRendererMap
 
         return (new self(new GenericRenderer()))
             ->register('read_file', new SnippetRenderer(['file_path']))
-            ->register('preview_file', new SnippetRenderer(['file_path']))
             ->register('parse_file', new SnippetRenderer(['file_path']))
             ->register('grep_file_content', new SnippetRenderer(['pattern', 'file_path']))
             ->register('glob_path', new SnippetRenderer(['pattern', 'directory']))
-            ->register('describe_directory_content', new SnippetRenderer(['directory']))
             ->register('bash', new SnippetRenderer(['command']))
             ->register('edit_file', new EditFileRenderer())
             ->register('write_file', $fileChange)

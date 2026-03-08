@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NeuronCore\Maestro\Rendering\Renderers;
 
 use NeuronCore\Maestro\Rendering\ToolRenderer;
+use NeuronCore\Maestro\Terminal\Color;
 
 use function escapeshellarg;
 use function fclose;
@@ -24,14 +25,6 @@ use const PHP_OS_FAMILY;
 
 class FileChangeRenderer implements ToolRenderer
 {
-    protected const ESC = "\033";
-    protected const RESET = self::ESC . "[0m";
-    protected const RED = self::ESC . "[31;1m";
-    protected const GREEN = self::ESC . "[32;1m";
-    protected const CYAN = self::ESC . "[36;1m";
-    protected const YELLOW = self::ESC . "[33;1m";
-    protected const GRAY = self::ESC . "[90m";
-
     public function render(string $toolName, string $arguments): string
     {
         $args = json_decode($arguments, true) ?? [];
@@ -48,8 +41,8 @@ class FileChangeRenderer implements ToolRenderer
             if (!$this->isDiffAvailable()) {
                 return $this->header($toolName, $path)
                     . $args['content']
-                    . "\n\n<comment>Tip: install the \"diff\" command to see a formatted diff: "
-                    . $this->diffInstallHint() . '</comment>';
+                    . "\n\n" . Color::yellow("Tip: install the \"diff\" command to see a formatted diff: "
+                    . $this->diffInstallHint());
             }
 
             $diff = $this->generateDiff($path, $current, $args['content']);
@@ -118,13 +111,13 @@ class FileChangeRenderer implements ToolRenderer
             }
             if (str_starts_with($line, '-')) {
                 // Deletions - red
-                $colored[] = self::RED . $line . self::RESET;
+                $colored[] = (string) Color::red($line);
             } elseif (str_starts_with($line, '+')) {
                 // Additions - green
-                $colored[] = self::GREEN . $line . self::RESET;
+                $colored[] = (string) Color::green($line);
             } elseif (str_starts_with($line, ' ')) {
                 // Context - gray
-                $colored[] = self::GRAY . $line . self::RESET;
+                $colored[] = (string) Color::gray($line);
             } elseif (str_starts_with($line, '\ No newline')) {
                 // Skip diff metadata lines
                 continue;

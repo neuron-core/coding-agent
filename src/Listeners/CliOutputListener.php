@@ -11,6 +11,7 @@ use NeuronCore\Maestro\Events\AgentThinkingEvent;
 use NeuronCore\Maestro\Events\ToolApprovalRequestedEvent;
 use NeuronCore\Maestro\Rendering\ToolRendererMap;
 use NeuronCore\Maestro\Settings\SettingsInterface;
+use NeuronCore\Maestro\Terminal\Color;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -89,7 +90,7 @@ class CliOutputListener
                 $this->alwaysAllowedActions[] = $action->name;
                 $this->sessionAllowedActions[] = $action->name;
                 $this->settings->addAllowedTool($action->name);
-                $this->output->writeln("<info>Tool '{$action->name}' is now always allowed.</info>");
+                $this->output->writeln(Color::cyan("Tool '{$action->name}' is now always allowed."));
             }
         } else {
             // Prompt for feedback when rejecting
@@ -103,7 +104,7 @@ class CliOutputListener
     private function askFeedback(): ?string
     {
         $helper = new QuestionHelper();
-        $question = new Question('<comment>Tell me what to do instead (press Enter to skip): </comment>');
+        $question = new Question(Color::yellow('Tell me what to do instead (press Enter to skip): '));
 
         return $helper->ask($this->input, $this->output, $question);
     }
