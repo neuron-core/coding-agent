@@ -37,12 +37,20 @@ Install Maestro globally to use it in any project:
 composer global require neuron-core/maestro
 ```
 
-Ensure Composer's global bin directory is in your system PATH:
+Ensure Composer's global bin directory is in your shell profile. Run `echo $0` to find the current shell.
+
+**bash**
 
 ```bash
-# Add the composer bin path to your shell profile (~/.bashrc, ~/.zshrc, etc.)
-export PATH=$(composer global config bin-dir --absolute --quiet):$PATH
+echo 'export PATH="$(composer config -g home)/vendor/bin:$PATH"' >> ~/.bashrc
 ```
+
+**zsh**
+
+```bash
+echo 'export PATH="$(composer config -g home)/vendor/bin:$PATH"' >> ~/.zshrc
+```
+
 
 To keep your tools up to date, run the global update:
 
@@ -52,15 +60,15 @@ composer global update
 
 ## Configuration
 
-Before using Maestro, configure your AI provider and API key.
+Before using Maestro, you need to configure your AI provider and API key.
 
-### Setting Up `.maestro/settings.json`
-
-Create a `.maestro` directory in your project and add a `settings.json` file:
+Navigate to the project directory you want to use Maestro in and run:
 
 ```bash
-mkdir -p .maestro && printf "{\n}" > .maestro/settings.json
+maestro configure
 ```
+
+It will start an interactive setup wizard.
 
 #### Anthropic
 
