@@ -56,7 +56,7 @@ class FileChangeRendererTest extends TestCase
         $result = $this->renderer->render('write_file', '{"file_path": "/tmp/foo.php", "content": "new content"}');
 
         $this->assertStringContainsString("\033[32;1m", $result); // Green for additions
-        $this->assertStringContainsString("\033[0m", $result); // Reset
+        $this->assertStringContainsString("\033[39;22m", $result); // Reset (Symfony format)
     }
 
     public function testAcceptsPathKeyAsAlternative(): void
@@ -93,6 +93,6 @@ class FileChangeRendererTest extends TestCase
         $result = $this->renderer->render('write_file', '{"file_path": "/tmp/test.php", "content": "content"}');
 
         $this->assertStringContainsString("\033[32;1m", $result); // Green for additions
-        $this->assertStringContainsString("\033[0m", $result); // Reset
+        $this->assertStringContainsString("\033[39;22m", $result); // Reset (Symfony format)
     }
 }

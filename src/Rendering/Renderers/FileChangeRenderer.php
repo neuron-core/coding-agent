@@ -111,10 +111,10 @@ class FileChangeRenderer implements ToolRenderer
             }
             if (str_starts_with($line, '-')) {
                 // Deletions - red
-                $colored[] = (string) Color::red($line);
+                $colored[] = (string) Color::red($line)->bold();
             } elseif (str_starts_with($line, '+')) {
                 // Additions - green
-                $colored[] = (string) Color::green($line);
+                $colored[] = (string) Color::green($line)->bold();
             } elseif (str_starts_with($line, ' ')) {
                 // Context - gray
                 $colored[] = (string) Color::gray($line);

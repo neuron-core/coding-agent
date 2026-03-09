@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace NeuronCore\Maestro\Rendering\Renderers;
 
-use NeuronCore\Maestro\Console\Color;
 use NeuronCore\Maestro\Rendering\ToolRenderer;
 
 use function implode;
@@ -33,12 +32,12 @@ class SnippetRenderer implements ToolRenderer
             if (isset($args[$key])) {
                 $content = is_string($args[$key]) ? $args[$key] : json_encode($args[$key]);
                 $content = mb_strlen($content) > 150 ? mb_substr($content, 0, 150) . '...' : $content;
-                $parts[] = Color::cyan("{$key}:").' '.Color::gray($content);
+                $parts[] = $content;
             }
         }
 
-        $display = $parts !== [] ? "\n ".implode("\n ", $parts)."\n" : $arguments;
+        $display = $parts !== [] ? implode(', ', $parts) : $arguments;
 
-        return sprintf("● %s(%s)\n", $toolName, $display);
+        return sprintf("● %s( %s )\n", $toolName, $display);
     }
 }
