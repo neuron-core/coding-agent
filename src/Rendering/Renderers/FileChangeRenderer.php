@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace NeuronCore\Maestro\Rendering\Renderers;
 
-use NeuronCore\Maestro\Console\StyledText;
+use NeuronCore\Maestro\Console\Text;
 use NeuronCore\Maestro\Rendering\ToolRenderer;
 
 use function escapeshellarg;
@@ -41,7 +41,7 @@ class FileChangeRenderer implements ToolRenderer
             if (!$this->isDiffAvailable()) {
                 return $this->header($toolName, $path)
                     . $args['content']
-                    . "\n\n" . StyledText::yellowText("Tip: install the \"diff\" command to see a formatted diff: "
+                    . "\n\n" . Text::yellowText("Tip: install the \"diff\" command to see a formatted diff: "
                     . $this->diffInstallHint());
             }
 
@@ -111,13 +111,13 @@ class FileChangeRenderer implements ToolRenderer
             }
             if (str_starts_with($line, '-')) {
                 // Deletions - red
-                $colored[] = StyledText::text($line)->red()->bold();
+                $colored[] = Text::text($line)->red()->bold();
             } elseif (str_starts_with($line, '+')) {
                 // Additions - green
-                $colored[] = StyledText::text($line)->green()->bold();
+                $colored[] = Text::text($line)->green()->bold();
             } elseif (str_starts_with($line, ' ')) {
                 // Context - gray
-                $colored[] = StyledText::grayText($line);
+                $colored[] = Text::grayText($line);
             } elseif (str_starts_with($line, '\ No newline')) {
                 // Skip diff metadata lines
                 continue;

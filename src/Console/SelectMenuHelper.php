@@ -166,7 +166,7 @@ class SelectMenuHelper
             }
 
             $this->output->writeln(sprintf(
-                StyledText::redText('Invalid choice. Enter a number between 1 and %d.'),
+                Text::redText('Invalid choice. Enter a number between 1 and %d.'),
                 $max
             ));
         }
@@ -181,7 +181,7 @@ class SelectMenuHelper
 
         foreach ($options as $i => $option) {
             if ($i === $selected) {
-                $this->output->writeln(sprintf('  %s', StyledText::cyanText('> ' . $option)));
+                $this->output->writeln(sprintf('  %s', Text::cyanText('> ' . $option)));
             } else {
                 $this->output->writeln(sprintf('    %s', $option));
             }

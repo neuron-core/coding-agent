@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace NeuronCore\Maestro\Commands;
 
-use NeuronCore\Maestro\Console\StyledText;
+use NeuronCore\Maestro\Console\Text;
 use NeuronCore\Maestro\Console\SelectMenuHelper;
 use NeuronCore\Maestro\Settings\ProviderFactory;
 use NeuronCore\Maestro\Settings\Settings;
@@ -71,15 +71,15 @@ class ConfigureCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('');
-        $output->writeln((string) StyledText::text('Welcome to Maestro Configuration')->cyan()->bold());
+        $output->writeln((string) Text::text('Welcome to Maestro Configuration')->cyan()->bold());
         $output->writeln('');
 
         $settings = new Settings();
 
         // Check if the settings file already exists
         if ($settings->fileExists()) {
-            $output->writeln(StyledText::yellowText('A settings file already exists at: ' . $settings->getSettingsPath()));
-            $output->writeln(StyledText::yellowText('This configuration will overwrite existing settings.'));
+            $output->writeln(Text::yellowText('A settings file already exists at: ' . $settings->getSettingsPath()));
+            $output->writeln(Text::yellowText('This configuration will overwrite existing settings.'));
             $output->writeln('');
         }
 
@@ -106,7 +106,7 @@ class ConfigureCommand extends Command
 
         if (in_array($selectedProvider, self::PROVIDERS_REQUIRING_BOTH, true)) {
             // Providers requiring both API key and base URL
-            $apiKeyQuestion = new Question(StyledText::yellowText('Enter API Key: '));
+            $apiKeyQuestion = new Question(Text::yellowText('Enter API Key: '));
             $apiKeyQuestion->setHidden(true);
             $apiKeyQuestion->setHiddenFallback(false);
 
@@ -114,13 +114,13 @@ class ConfigureCommand extends Command
             $output->writeln('');
 
             $urlQuestion = new Question(
-                StyledText::yellowText('Enter Base URL: '),
+                Text::yellowText('Enter Base URL: '),
             );
             $baseUrl = trim((string) $questionHelper->ask($input, $output, $urlQuestion));
             $output->writeln('');
         } elseif (in_array($selectedProvider, self::PROVIDERS_REQUIRING_API_KEY, true)) {
             // Providers requiring only API key
-            $apiKeyQuestion = new Question(StyledText::yellowText('Enter API Key: '));
+            $apiKeyQuestion = new Question(Text::yellowText('Enter API Key: '));
             $apiKeyQuestion->setHidden(true);
             $apiKeyQuestion->setHiddenFallback(false);
 
@@ -129,20 +129,20 @@ class ConfigureCommand extends Command
         } elseif (in_array($selectedProvider, self::PROVIDERS_REQUIRING_BASE_URL, true)) {
             // Providers requiring only base URL
             $urlQuestion = new Question(
-                StyledText::yellowText('Enter Base URL [http://localhost:11434]: '),
+                Text::yellowText('Enter Base URL [http://localhost:11434]: '),
                 'http://localhost:11434'
             );
             $baseUrl = trim((string) $questionHelper->ask($input, $output, $urlQuestion));
             $output->writeln('');
         } else {
-            $output->writeln(StyledText::redText('Unknown provider type selected.'));
+            $output->writeln(Text::redText('Unknown provider type selected.'));
             return Command::FAILURE;
         }
 
         // Step 3: Collect model name
         $defaultModel = self::DEFAULT_MODELS[$selectedProvider];
         $modelQuestion = new Question(
-            StyledText::yellowText('Enter Model [' . $defaultModel . ']: '),
+            Text::yellowText('Enter Model [' . $defaultModel . ']: '),
             $defaultModel
         );
         $model = trim((string) $questionHelper->ask($input, $output, $modelQuestion));
@@ -177,10 +177,10 @@ class ConfigureCommand extends Command
             json_encode($config, JSON_PRETTY_PRINT)
         );
 
-        $output->writeln(StyledText::greenText('Configuration saved successfully!'));
-        $output->writeln(StyledText::cyanText('Settings file: ' . $settings->getSettingsPath()));
+        $output->writeln(Text::greenText('Configuration saved successfully!'));
+        $output->writeln(Text::cyanText('Settings file: ' . $settings->getSettingsPath()));
         $output->writeln('');
-        $output->writeln(StyledText::cyanText('You can now run: maestro'));
+        $output->writeln(Text::cyanText('You can now run: maestro'));
         $output->writeln('');
 
         return Command::SUCCESS;

@@ -14,7 +14,7 @@ use function implode;
 use function str_contains;
 use function trim;
 
-final class StyledText implements Stringable
+final class Text implements Stringable
 {
     private static ?OutputFormatter $formatter = null;
 
