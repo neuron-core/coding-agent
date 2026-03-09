@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace NeuronCore\Maestro\Console;
 
 use Stringable;
+use Symfony\Component\Console\Formatter\OutputFormatter;
+use Symfony\Component\Console\Formatter\OutputFormatterStyleInterface;
 
 use function array_merge;
 use function explode;
@@ -14,7 +16,70 @@ use function trim;
 
 final class StyledText implements Stringable
 {
+    private static ?OutputFormatter $formatter = null;
+
     private array $styles = [];
+
+    public static function text(string $text): self
+    {
+        return new self($text);
+    }
+
+    public static function redText(string $text): string
+    {
+        return (string) self::text($text)->red();
+    }
+
+    public static function greenText(string $text): string
+    {
+        return (string) self::text($text)->green();
+    }
+
+    public static function cyanText(string $text): string
+    {
+        return (string) self::text($text)->cyan();
+    }
+
+    public static function yellowText(string $text): string
+    {
+        return (string) self::text($text)->yellow();
+    }
+
+    public static function grayText(string $text): string
+    {
+        return (string) self::text($text)->gray();
+    }
+
+    public static function whiteText(string $text): string
+    {
+        return (string) self::text($text)->white();
+    }
+
+    public static function blueText(string $text): string
+    {
+        return (string) self::text($text)->blue();
+    }
+
+    public static function magentaText(string $text): string
+    {
+        return (string) self::text($text)->magenta();
+    }
+
+    public static function blackText(string $text): string
+    {
+        return (string) self::text($text)->black();
+    }
+
+    public static function register(string $name, OutputFormatterStyleInterface $style): void
+    {
+        self::formatter()->setStyle($name, $style);
+    }
+
+    public static function formatter(): OutputFormatter
+    {
+        self::$formatter ??= new OutputFormatter(true);
+        return self::$formatter;
+    }
 
     public function __construct(
         private readonly string $text
@@ -175,7 +240,7 @@ final class StyledText implements Stringable
         if ($style === '') {
             return $this->text;
         }
-        return (string) Color::formatter()->format("<{$style}>{$this->text}</>");
+        return (string) self::formatter()->format("<{$style}>{$this->text}</>");
     }
 
     private function buildStyleString(): string

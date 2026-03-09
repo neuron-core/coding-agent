@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace NeuronCore\Maestro\Listeners;
 
 use NeuronAI\Workflow\Interrupt\Action;
-use NeuronCore\Maestro\Console\Color;
+use NeuronCore\Maestro\Console\StyledText;
 use NeuronCore\Maestro\Console\SelectMenuHelper;
 use NeuronCore\Maestro\Events\AgentResponseEvent;
 use NeuronCore\Maestro\Events\AgentThinkingEvent;
@@ -90,7 +90,7 @@ class CliOutputListener
                 $this->alwaysAllowedActions[] = $action->name;
                 $this->sessionAllowedActions[] = $action->name;
                 $this->settings->addAllowedTool($action->name);
-                $this->output->writeln((string) Color::cyan("Tool '{$action->name}' is now always allowed."));
+                $this->output->writeln(StyledText::cyanText("Tool '{$action->name}' is now always allowed."));
             }
         } else {
             // Prompt for feedback when rejecting
@@ -104,7 +104,7 @@ class CliOutputListener
     private function askFeedback(): ?string
     {
         $helper = new QuestionHelper();
-        $question = new Question((string) Color::yellow('Tell me what to do instead (press Enter to skip): '));
+        $question = new Question(StyledText::yellowText('Tell me what to do instead (press Enter to skip): '));
 
         return $helper->ask($this->input, $this->output, $question);
     }

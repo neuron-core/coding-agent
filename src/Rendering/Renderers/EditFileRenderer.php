@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace NeuronCore\Maestro\Rendering\Renderers;
 
-use NeuronCore\Maestro\Console\Color;
+use NeuronCore\Maestro\Console\StyledText;
 use NeuronCore\Maestro\Rendering\ToolRenderer;
 
 use function escapeshellarg;
@@ -38,7 +38,7 @@ class EditFileRenderer implements ToolRenderer
         $diff = $this->generateSearchReplaceDiff($search, $replace);
 
         if ($diff === '') {
-            return $header . Color::cyan("No changes (search and replace are identical)") . "\n";
+            return $header . StyledText::cyanText("No changes (search and replace are identical)") . "\n";
         }
 
         // Apply ANSI colors directly to the diff
@@ -84,13 +84,13 @@ class EditFileRenderer implements ToolRenderer
             }
             if (str_starts_with($line, '-')) {
                 // Deletions - red
-                $colored[] = (string) Color::red($line);
+                $colored[] = StyledText::redText($line);
             } elseif (str_starts_with($line, '+')) {
                 // Additions - green
-                $colored[] = (string) Color::green($line);
+                $colored[] = StyledText::greenText($line);
             } elseif (str_starts_with($line, ' ')) {
                 // Context - gray
-                $colored[] = (string) Color::gray($line);
+                $colored[] = StyledText::grayText($line);
             } elseif (str_starts_with($line, '\ No newline')) {
                 // Skip diff metadata lines
                 continue;

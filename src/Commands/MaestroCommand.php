@@ -6,7 +6,7 @@ namespace NeuronCore\Maestro\Commands;
 
 use Exception;
 use NeuronCore\Maestro\Agent\CodingAgent;
-use NeuronCore\Maestro\Console\Color;
+use NeuronCore\Maestro\Console\StyledText;
 use NeuronCore\Maestro\EventBus\EventDispatcher;
 use NeuronCore\Maestro\Events\AgentResponseEvent;
 use NeuronCore\Maestro\Events\AgentThinkingEvent;
@@ -46,13 +46,13 @@ class MaestroCommand extends Command
 
         if (!$settings->fileExists()) {
             $output->writeln('');
-            $output->writeln((string) Color::red('Warning: Settings file not found at ' . $settings->getSettingsPath()));
-            $output->writeln((string) Color::red('The agent requires AI provider connection information.'));
+            $output->writeln(StyledText::redText('Warning: Settings file not found at ' . $settings->getSettingsPath()));
+            $output->writeln(StyledText::redText('The agent requires AI provider connection information.'));
             $output->writeln('');
-            $output->writeln((string) Color::cyan('Run the interactive configuration command to get started:'));
-            $output->writeln((string) Color::white('  maestro configure'));
+            $output->writeln(StyledText::cyanText('Run the interactive configuration command to get started:'));
+            $output->writeln(StyledText::whiteText('  maestro configure'));
             $output->writeln('');
-            $output->writeln((string) Color::cyan('Or create a .maestro/settings.json file manually with your AI provider configuration:'));
+            $output->writeln(StyledText::cyanText('Or create a .maestro/settings.json file manually with your AI provider configuration:'));
             $output->writeln(json_encode([
                 'provider' => [
                     'type' => 'openai',
@@ -65,8 +65,8 @@ class MaestroCommand extends Command
         }
 
         if (!$settings->hasValidProvider()) {
-            $output->writeln((string) Color::red('Warning: Settings file is missing valid provider configuration.'));
-            $output->writeln((string) Color::red("The 'provider.type' setting is required."));
+            $output->writeln(StyledText::redText('Warning: Settings file is missing valid provider configuration.'));
+            $output->writeln(StyledText::redText("The 'provider.type' setting is required."));
             $output->writeln('');
             return Command::FAILURE;
         }
@@ -81,14 +81,14 @@ class MaestroCommand extends Command
         $orchestrator = new AgentOrchestrator(CodingAgent::make($settings), $dispatcher);
 
         $output->writeln("\n");
-        $output->writeln((string) Color::cyan("  __  __                 _             ")->bold());
-        $output->writeln((string) Color::cyan(" |  \\/  |               | |            ")->bold());
-        $output->writeln((string) Color::cyan(" | \\  / | __ _  ___  ___| |_ _ __ ___  ")->bold());
-        $output->writeln((string) Color::cyan(" | |\\/| |/ _` |/ _ \\/ __| __| '__/ _ \\ ")->bold());
-        $output->writeln((string) Color::cyan(" | |  | | (_| |  __/\\__ \\ |_| | | (_) |")->bold());
-        $output->writeln((string) Color::cyan(" |_|  |_|\\__,_|\\___||___/\\__|_|  \\___/ ")->bold());
+        $output->writeln((string) StyledText::text("  __  __                 _             ")->cyan()->bold());
+        $output->writeln((string) StyledText::text(" |  \\/  |               | |            ")->cyan()->bold());
+        $output->writeln((string) StyledText::text(" | \\  / | __ _  ___  ___| |_ _ __ ___  ")->cyan()->bold());
+        $output->writeln((string) StyledText::text(" | |\\/| |/ _` |/ _ \\/ __| __| '__/ _ \\ ")->cyan()->bold());
+        $output->writeln((string) StyledText::text(" | |  | | (_| |  __/\\__ \\ |_| | | (_) |")->cyan()->bold());
+        $output->writeln((string) StyledText::text(" |_|  |_|\\__,_|\\___||___/\\__|_|  \\___/ ")->cyan()->bold());
         $output->writeln("");
-        $output->writeln((string) Color::white(" Coding Agent  •  Powered by Neuron AI framework (https://docs.neuron-ai.dev) ")->bold());
+        $output->writeln((string) StyledText::text(" Coding Agent  •  Powered by Neuron AI framework (https://docs.neuron-ai.dev) ")->white()->bold());
         $output->writeln("\n");
 
         while (true) {
@@ -101,12 +101,12 @@ class MaestroCommand extends Command
             try {
                 $orchestrator->chat($userInput);
             } catch (Exception $e) {
-                $output->writeln((string) Color::red('Error: ' . $e->getMessage()));
+                $output->writeln(StyledText::redText('Error: ' . $e->getMessage()));
                 $output->writeln('');
             }
         }
 
-        $output->writeln((string) Color::cyan('Goodbye!'));
+        $output->writeln(StyledText::cyanText('Goodbye!'));
         return Command::SUCCESS;
     }
 
