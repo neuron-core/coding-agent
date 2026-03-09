@@ -4,9 +4,9 @@
 declare(strict_types=1);
 
 /**
- * Coding Agent - CLI Entry Point
+ * Maestro - CLI Entry Point
  *
- * AI-powered coding assistant built with Neuron AI framework and Symfony Console.
+ * AI-powered coding assistant built with Neuron AI framework.
  */
 
 if (php_sapi_name() !== 'cli') {
@@ -28,9 +28,11 @@ foreach ($autoloadPaths as $autoloadPath) {
 }
 
 use NeuronCore\Maestro\Commands\MaestroCommand;
+use NeuronCore\Maestro\Commands\ConfigureCommand;
 use Symfony\Component\Console\Application;
 
 $app = new Application('Maestro', '1.x');
 $app->addCommand(new MaestroCommand());
-$app->setDefaultCommand('maestro', true);
+$app->addCommand(new ConfigureCommand());
+$app->setDefaultCommand('maestro');
 $app->run();

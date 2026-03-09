@@ -7,6 +7,7 @@ namespace NeuronCore\Maestro\Settings;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Providers\Anthropic\Anthropic;
 use NeuronAI\Providers\OpenAI\OpenAI;
+use NeuronAI\Providers\OpenAILike;
 use NeuronAI\Providers\Gemini\Gemini;
 use NeuronAI\Providers\Cohere\Cohere;
 use NeuronAI\Providers\Mistral\Mistral;
@@ -42,6 +43,16 @@ class ProviderFactory implements ProviderFactoryInterface
      * @param string $provider Provider name (e.g., 'anthropic', 'openai')
      * @param callable $factory Function that receives settings and returns AIProviderInterface
      */
+    /**
+     * Get all supported provider types.
+     *
+     * @return string[]
+     */
+    public function getSupportedProviders(): array
+    {
+        return array_keys($this->factories);
+    }
+
     public function register(string $provider, callable $factory): self
     {
         $this->factories[strtolower($provider)] = $factory;
@@ -81,6 +92,7 @@ class ProviderFactory implements ProviderFactoryInterface
     {
         $this->factories['anthropic'] = fn (array $settings): \NeuronAI\Providers\Anthropic\Anthropic => $this->createAnthropic($settings);
         $this->factories['openai'] = fn (array $settings): \NeuronAI\Providers\OpenAI\OpenAI => $this->createOpenAI($settings);
+        $this->factories['openailike'] = fn (array $settings): \NeuronAI\Providers\OpenAILike => $this->createOpenAILike($settings);
         $this->factories['gemini'] = fn (array $settings): \NeuronAI\Providers\Gemini\Gemini => $this->createGemini($settings);
         $this->factories['cohere'] = fn (array $settings): \NeuronAI\Providers\Cohere\Cohere => $this->createCohere($settings);
         $this->factories['mistral'] = fn (array $settings): \NeuronAI\Providers\Mistral\Mistral => $this->createMistral($settings);
@@ -116,6 +128,31 @@ class ProviderFactory implements ProviderFactoryInterface
         }
 
         return new OpenAI(
+            key: $apiKey,
+            model: $settings['model'] ?? 'gpt-4',
+            parameters: $parameters,
+        );
+    }
+
+    private function createOpenAILike(array $settings): OpenAILike
+    {
+        $baseUrl = $settings['base_url']
+            ?? throw new RuntimeException(
+                'OpenAI-Compatible base URL is not configured. Add "base_url" to provider object in .maestro/settings.json.'
+            );
+
+        $apiKey = $settings['api_key']
+            ?? throw new RuntimeException(
+                'OpenAI-Compatible API key is not configured. Add "api_key" to provider object in .maestro/settings.json.'
+            );
+
+        $parameters = [];
+        if (isset($settings['max_tokens'])) {
+            $parameters['max_tokens'] = $settings['max_tokens'];
+        }
+
+        return new OpenAILike(
+            baseUri: $baseUrl,
             key: $apiKey,
             model: $settings['model'] ?? 'gpt-4',
             parameters: $parameters,

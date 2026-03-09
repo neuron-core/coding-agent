@@ -33,7 +33,7 @@ use const STDIN;
 
 #[AsCommand(
     name: 'maestro',
-    description: 'Synapse Coding Agent - built with Neuron AI framework',
+    description: 'Maestro - coding agent built with Neuron AI framework',
 )]
 class MaestroCommand extends Command
 {
@@ -45,10 +45,14 @@ class MaestroCommand extends Command
         $settings = new Settings();
 
         if (!$settings->fileExists()) {
+            $output->writeln('');
             $output->writeln((string) Color::red('Warning: Settings file not found at ' . $settings->getSettingsPath()));
             $output->writeln((string) Color::red('The agent requires AI provider connection information.'));
             $output->writeln('');
-            $output->writeln((string) Color::cyan('Create a settings.json file with your AI provider configuration:'));
+            $output->writeln((string) Color::cyan('Run the interactive configuration command to get started:'));
+            $output->writeln((string) Color::white('  maestro configure'));
+            $output->writeln('');
+            $output->writeln((string) Color::cyan('Or create a .maestro/settings.json file manually with your AI provider configuration:'));
             $output->writeln(json_encode([
                 'provider' => [
                     'type' => 'openai',
