@@ -48,20 +48,6 @@ To keep your tools up to date, run the global update:
 composer global update
 ```
 
-### Per Project Installation
-
-Install as a dev dependency in your project:
-
-```bash
-composer require --dev neuron-core/maestro
-```
-
-Run the command:
-
-```bash
-vendor/bin/maestro
-```
-
 ## Configuration
 
 Before using Maestro, configure your AI provider and API key.
