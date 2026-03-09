@@ -46,7 +46,7 @@ class FileChangeRenderer implements ToolRenderer
             }
 
             $diff = $this->generateDiff($path, $current, $args['content']);
-            return $this->header($toolName, $path) . $this->colorizeDiff($diff);
+            return $this->header($toolName, $path) . "\n\n".$this->colorizeDiff($diff)."\n\n";
         }
 
         return (new GenericRenderer())->render($toolName, $arguments);

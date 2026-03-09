@@ -180,7 +180,7 @@ class ConfigureCommand extends Command
         $output->writeln((string) Color::green('Configuration saved successfully!'));
         $output->writeln((string) Color::cyan('Settings file: ' . $settings->getSettingsPath()));
         $output->writeln('');
-        $output->writeln((string) Color::cyan('You can now run: php maestro'));
+        $output->writeln((string) Color::cyan('You can now run: maestro'));
         $output->writeln('');
 
         return Command::SUCCESS;

@@ -69,7 +69,7 @@ class CliOutputListener
     {
         $values = ['allow', 'session', 'always', 'reject'];
 
-        $index = (new SelectMenuHelper($this->output))->ask('Options:', [
+        $index = (new SelectMenuHelper($this->output))->ask("Options: ", [
             'Allow once',
             'Allow for session',
             'Always allow',
