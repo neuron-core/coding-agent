@@ -27,6 +27,8 @@ While most AI coding agents are written in Python or TypeScript, Maestro demonst
 
 ## Installation
 
+For Windows machine you should run Maestro in a WSL environment.
+
 ### Global Installation
 
 Install Maestro globally to use it in any project:
@@ -35,7 +37,7 @@ Install Maestro globally to use it in any project:
 composer global require neuron-core/maestro
 ```
 
-Ensure Composer's global bin directory is in your PATH:
+Ensure Composer's global bin directory is in your system PATH:
 
 ```bash
 # Add the composer bin path to your shell profile (~/.bashrc, ~/.zshrc, etc.)
