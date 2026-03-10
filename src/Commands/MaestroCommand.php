@@ -116,9 +116,8 @@ class MaestroCommand extends Command
                         $this->registry->get($commandName)->execute($args, $input, $output);
                     } catch (Exception $e) {
                         $output->writeln(Text::content('Command error: ' . $e->getMessage())->red()->build() . "\n");
-                    } finally {
-                        continue;
                     }
+                    continue;
                 }
 
                 $output->writeln(Text::content("Unknown command: /{$commandName}")->yellow()->build());
