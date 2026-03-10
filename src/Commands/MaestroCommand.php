@@ -103,6 +103,7 @@ class MaestroCommand extends Command
         while (true) {
             $output->writeln('');
             $userInput = trim($this->readInput('> '));
+            $output->writeln('');
 
             if (in_array($userInput, ['', 'exit'], true)) {
                 break;

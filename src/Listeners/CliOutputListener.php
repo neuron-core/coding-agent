@@ -98,6 +98,7 @@ class CliOutputListener
         } else {
             // Prompt for feedback when rejecting
             $feedback = $this->askFeedback();
+            $this->output->writeln('');
             $action->reject($feedback ?: null);
         }
     }
