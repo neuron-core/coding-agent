@@ -54,7 +54,7 @@ class CliOutputListener
         $this->clearLine();
 
         foreach ($event->approvalRequest->getPendingActions() as $action) {
-            $this->output->writeln($this->rendererMap->render($action->name, $action->description));
+            $this->output->writeln($this->rendererMap->render($action->name, $action->description)."\n");
 
             if (in_array($action->name, $this->alwaysAllowedActions, true) ||
                 in_array($action->name, $this->sessionAllowedActions, true)) {
@@ -119,6 +119,6 @@ class CliOutputListener
             $this->spinner->finish();
             $this->spinner = null;
         }
-        //$this->output->write("\r" . str_repeat(' ', 50) . "\r");
+        $this->output->write("\r" . str_repeat(' ', 50) . "\r");
     }
 }
