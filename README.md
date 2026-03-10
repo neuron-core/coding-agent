@@ -75,7 +75,7 @@ It will start an interactive setup wizard.
     "provider": {
         "type": "anthropic",
         "api_key": "sk-ant-your-api-key-here",
-        "model": "claude-sonnet-4-20250514",
+        "model": "claude-sonnet-4-6",
         "max_tokens": 8192
     }
 }
@@ -94,20 +94,20 @@ It will start an interactive setup wizard.
 }
 ```
 
-#### Google Gemini
+#### Gemini
 
 ```json
 {
     "provider": {
         "type": "gemini",
         "api_key": "your-gemini-api-key",
-        "model": "gemini-pro",
+        "model": "gemini-3-pro-preview",
         "max_tokens": 8192
     }
 }
 ```
 
-#### Local Ollama
+#### Ollama
 
 ```json
 {
