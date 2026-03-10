@@ -45,7 +45,7 @@ class InitCommand extends Command
     ];
 
     private const DEFAULT_MODELS = [
-        'anthropic' => 'claude-haiku-4-5',
+        'anthropic' => 'claude-sonnet-4-6',
         'openai' => 'gpt-5',
         'gemini' => 'gemini-3-pro-preview',
         'cohere' => 'command-a-reasoning-08-2025',
