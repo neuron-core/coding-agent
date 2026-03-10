@@ -58,7 +58,7 @@ class HelpInlineCommand implements InlineCommand
             // Pad the name column for alignment
             $paddedName = str_pad($name, $maxNameLength + 5);
 
-            $output->writeln($paddedName . $description);
+            $output->writeln($paddedName . ' - '. $description);
         }
 
         $output->writeln('');

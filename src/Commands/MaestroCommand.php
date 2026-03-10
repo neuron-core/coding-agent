@@ -101,6 +101,7 @@ class MaestroCommand extends Command
         $this->printIntro($output);
 
         while (true) {
+            $output->writeln('');
             $userInput = trim($this->readInput('> '));
 
             if (in_array($userInput, ['', 'exit'], true)) {
@@ -170,6 +171,6 @@ class MaestroCommand extends Command
         $output->writeln(Text::content(" Powered by Neuron AI framework (https://docs.neuron-ai.dev) ")->white()->bold()->build());
         $output->writeln("");
         $output->writeln(Text::content(" Tip: Type /help to see available inline commands.")->gray()->build());
-        $output->writeln("\n");
+        $output->writeln("");
     }
 }
