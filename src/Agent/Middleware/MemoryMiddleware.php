@@ -6,6 +6,7 @@ namespace NeuronCore\Maestro\Agent\Middleware;
 
 use NeuronAI\Agent\Events\AIInferenceEvent;
 use NeuronAI\Workflow\Events\Event;
+use NeuronAI\Workflow\Events\StopEvent;
 use NeuronAI\Workflow\Middleware\WorkflowMiddleware;
 use NeuronAI\Workflow\NodeInterface;
 use NeuronAI\Workflow\WorkflowState;
@@ -213,7 +214,9 @@ PROMPT;
      */
     public function after(NodeInterface $node, Event $result, WorkflowState $state): void
     {
-        // Invalidate cache after node execution to pick up any changes
-        $this->cachedMemories = null;
+        if ($result instanceof StopEvent) {
+            // Invalidate cache after the agent ends the execution to pick up any changes on the next iteration
+            $this->cachedMemories = null;
+        }
     }
 }
