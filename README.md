@@ -124,12 +124,12 @@ It will start an interactive setup wizard.
 
 Additional supported providers with similar configuration:
 
-| Provider | Type | API Key |
+| Provider | Type |
 |---|---|---|
-| **Cohere** | `"cohere"` | `api_key` |
-| **Mistral** | `"mistral"` | `api_key` |
-| **Grok (xAI)** | `"xai"` or `"grok"` | `api_key` |
-| **Deepseek** | `"deepseek"` | `api_key` |
+| **Cohere** | `"cohere"` |
+| **Mistral** | `"mistral"` |
+| **Grok (xAI)** | `"xai"` or `"grok"` |
+| **Deepseek** | `"deepseek"` |
 
 ### Context File Configuration
 
