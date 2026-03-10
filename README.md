@@ -7,7 +7,7 @@ with interactive tool approval.
 ![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-[![](assets/repo-cover.png)](https://github.com/neuron-core/neuron-ai)
+[![](assets/maestro-agent-clip.gif)](https://neuron-ai.dev)
 
 ## About Maestro
 
