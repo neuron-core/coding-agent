@@ -139,7 +139,7 @@ If no `context_file` is specified, the agent will look for `Agents.md` in the pr
         "type": "anthropic",
         "api_key": "sk-ant-your-api-key-here"
     },
-    "context_file": "docs/Agent.md"
+    "context_file": "CLAUDE.md"
 }
 ```
 
