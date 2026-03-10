@@ -149,18 +149,24 @@ Add Model Context Protocol servers to extend the agent's capabilities:
 
 ```json
 {
-  "mcp_servers": {
-    "tavily": {
-      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<your-api-key>"
+    "provider": {
+        ...
     },
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "your-github-token"
-      }
+    "mcp_servers": {
+        "tavily": {
+            "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<your-api-key>"
+        },
+        "github": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-github"
+            ],
+            "env": {
+                "GITHUB_PERSONAL_ACCESS_TOKEN": "your-github-token"
+            }
+        }
     }
-  }
 }
 ```
 
