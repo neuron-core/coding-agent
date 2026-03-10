@@ -28,11 +28,11 @@ foreach ($autoloadPaths as $autoloadPath) {
 }
 
 use NeuronCore\Maestro\Commands\MaestroCommand;
-use NeuronCore\Maestro\Commands\ConfigureCommand;
+use NeuronCore\Maestro\Commands\InitCommand;
 use Symfony\Component\Console\Application;
 
 $app = new Application('Maestro', '1.x');
 $app->addCommand(new MaestroCommand());
-$app->addCommand(new ConfigureCommand());
+$app->addCommand(new InitCommand());
 $app->setDefaultCommand('maestro');
 $app->run();

@@ -27,10 +27,10 @@ use function trim;
 use const JSON_PRETTY_PRINT;
 
 #[AsCommand(
-    name: 'maestro configure',
-    description: 'Configure Maestro AI provider settings interactively',
+    name: 'maestro init',
+    description: 'Initialize Maestro AI provider settings interactively',
 )]
-class ConfigureCommand extends Command
+class InitCommand extends Command
 {
     private const PROVIDER_NAMES = [
         'anthropic' => 'Anthropic (Claude)',
@@ -180,7 +180,7 @@ class ConfigureCommand extends Command
         $output->writeln(Text::content('Configuration saved successfully!')->green()->build());
         $output->writeln(Text::content('Settings file: ' . $settings->getSettingsPath())->cyan()->build());
         $output->writeln('');
-        $output->writeln(Text::content('You can now run: maestro')->cyan()->build());
+        $output->writeln(Text::content('You can now run: ')->cyan()->build() . "maestro");
         $output->writeln('');
 
         return Command::SUCCESS;

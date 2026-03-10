@@ -61,11 +61,10 @@ composer global update
 ## Configuration
 
 Before using Maestro, you need to configure your AI provider and API key.
-
-Navigate to the project directory you want to use Maestro in and run:
+Navigate to the project directory you want to use Maestro in and run the command below:
 
 ```bash
-maestro configure
+maestro init
 ```
 
 It will start an interactive setup wizard.
@@ -200,39 +199,6 @@ Start an interactive chat session:
 
 ```bash
 maestro
-```
-
-### Single Question
-
-Ask a single question without entering interactive mode:
-
-```bash
-maestro "How do I fix this PHP error?"
-```
-
-### Project Context
-
-Navigate to your project directory and start chatting—the agent can read and analyze files in your current directory:
-
-```bash
-cd /path/to/your/project
-maestro
-```
-
-**Example interactions:**
-
-```bash
-# Ask about your codebase
-> What does this project do?
-
-# Request code review
-> Review the UserController.php file for security issues
-
-# Get help debugging
-> I'm getting a "Class not found" error in Auth.php
-
-# Request refactoring
-> Can you refactor the UserService class to use dependency injection?
 ```
 
 ### Tool Approval
