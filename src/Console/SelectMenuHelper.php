@@ -132,7 +132,13 @@ class SelectMenuHelper
             $this->raiseSignal($this->pendingSignal);
         }
 
-        $this->output->writeln('');
+        // Clear the menu from the screen
+        $cursor->moveUp($count + 1);
+        for ($i = 0; $i <= $count; $i++) {
+            $cursor->clearLine();
+            $cursor->moveDown();
+        }
+        $cursor->moveUp($count + 1);
 
         return $selected;
     }
