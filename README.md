@@ -124,7 +124,7 @@ It will start an interactive setup wizard.
 Additional supported providers with similar configuration:
 
 | Provider | Type |
-|---|---|---|
+|---|---|
 | **Cohere** | `"cohere"` |
 | **Mistral** | `"mistral"` |
 | **Grok (xAI)** | `"xai"` or `"grok"` |
