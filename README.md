@@ -264,4 +264,4 @@ Built with:
 
 ---
 
-Made with ❤️ by [Neuron AI](https://github.com/neuron-core/neuron-ai) team
+Made with ❤️ by [Inspector](https://inspector.dev) team
