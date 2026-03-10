@@ -49,7 +49,7 @@ class MemoryMiddleware implements WorkflowMiddleware
     }
 
     /**
-     * Get the path to the memories directory.
+     * Get the path to the memories' directory.
      */
     public function getMemoriesDir(): string
     {
