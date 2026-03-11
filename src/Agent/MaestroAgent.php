@@ -6,6 +6,7 @@ namespace NeuronCore\Maestro\Agent;
 
 use Inspector\Exceptions\InspectorException;
 use NeuronAI\Agent\Agent;
+use NeuronAI\Agent\Middleware\TodoPlanning;
 use NeuronAI\Agent\Middleware\ToolApproval;
 use NeuronAI\Agent\Nodes\ChatNode;
 use NeuronAI\Agent\Nodes\StreamingNode;
@@ -57,10 +58,12 @@ class MaestroAgent extends Agent
             $this->settings->dirPath() . '/memories'
         );
 
+        $todo = new TodoPlanning();
+
         return [
-            ChatNode::class => [$memory],
-            StreamingNode::class => [$memory],
-            StructuredOutputNode::class => [$memory],
+            ChatNode::class => [$memory, $todo],
+            StreamingNode::class => [$memory, $todo],
+            StructuredOutputNode::class => [$memory, $todo],
 
             ToolNode::class => [
                 new ToolApproval()
