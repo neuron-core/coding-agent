@@ -17,5 +17,5 @@ interface ProviderFactoryInterface
      *
      * @throws RuntimeException if provider cannot be created
      */
-    public function create(array $config): AIProviderInterface;
+    public function create(string $type, array $list): AIProviderInterface;
 }

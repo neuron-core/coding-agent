@@ -96,7 +96,7 @@ class Settings implements SettingsInterface
      */
     public function hasValidProvider(): bool
     {
-        return isset($this->settings['provider']) && isset($this->settings['provider']['type']);
+        return isset($this->settings['providers']) && isset($this->settings['default']);
     }
 
     /**
@@ -104,7 +104,7 @@ class Settings implements SettingsInterface
      */
     public function provider(): AIProviderInterface
     {
-        return $this->providerFactory->create($this->settings);
+        return $this->providerFactory->create($this->settings['default'], $this->settings['providers']);
     }
 
     /**

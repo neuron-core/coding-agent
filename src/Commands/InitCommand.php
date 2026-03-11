@@ -119,7 +119,7 @@ class InitCommand extends Command
             $baseUrl = trim((string) $questionHelper->ask($input, $output, $urlQuestion));
             $output->writeln('');
         } elseif (in_array($selectedProvider, self::PROVIDERS_REQUIRING_API_KEY, true)) {
-            // Providers requiring only API key
+            // Providers requiring only the API key
             $apiKeyQuestion = new Question(Text::content('Enter API Key: ')->yellow()->build());
             $apiKeyQuestion->setHidden(true);
             $apiKeyQuestion->setHiddenFallback(false);
@@ -150,20 +150,20 @@ class InitCommand extends Command
 
         // Build configuration
         $config = [
-            'provider' => [
-                'type' => $selectedProvider,
-            ],
+            'default' => $selectedProvider,
         ];
 
+        $config['providers'] = [];
+
         if (isset($apiKey)) {
-            $config['provider']['api_key'] = $apiKey;
+            $config['providers'][$selectedProvider]['api_key'] = $apiKey;
         }
 
         if (isset($baseUrl)) {
-            $config['provider']['base_url'] = $baseUrl;
+            $config['providers'][$selectedProvider]['base_url'] = $baseUrl;
         }
 
-        $config['provider']['model'] = $model;
+        $config['providers'][$selectedProvider]['model'] = $model;
 
         // Ensure directory exists
         $settingsDir = dirname($settings->getSettingsPath());

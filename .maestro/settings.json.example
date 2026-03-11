@@ -1,7 +1,14 @@
 {
-  "provider": {
-    "type": "anthropic",
-    "api_key": "ANTHROPIC_API_KEY",
-    "model": "claude-sonnet-4-6",
-  }
+    "default": "anthropic",
+    "providers": {
+        "anthropic": {
+            "api_key": "ANTHROPIC_API_KEY",
+            "model": "claude-sonnet-4-6",
+        },
+    },
+    "mcp_servers": {
+        "inspector": {
+            "url": "http://app.inspector.dev/mcp?app=<APP_ID>"
+        }
+    }
 }

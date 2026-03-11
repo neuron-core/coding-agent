@@ -46,9 +46,11 @@ class SettingsTest extends TestCase
     public function testLoadSettingsFromFile(): void
     {
         $config = [
-            'provider' => [
-                'type' => 'anthropic',
-                'api_key' => 'test-key',
+            'default' => 'anthropic',
+            'providers' => [
+                'anthropic' => [
+                    'api_key' => 'test-key',
+                ],
             ],
         ];
 
@@ -56,8 +58,8 @@ class SettingsTest extends TestCase
 
         $settings = new Settings($this->tempSettingsPath);
 
-        $this->assertSame('test-key', $settings->get('provider.api_key'));
-        $this->assertSame('anthropic', $settings->get('provider.type'));
+        $this->assertSame('test-key', $settings->get('providers.anthropic.api_key'));
+        $this->assertSame('anthropic', $settings->get('default'));
     }
 
     public function testLoadSettingsFromDefaultPath(): void
@@ -105,43 +107,47 @@ class SettingsTest extends TestCase
     public function testGetReturnsValueForExistingKey(): void
     {
         $config = [
-            'provider' => [
-                'type' => 'openai',
-                'model' => 'gpt-4',
+            'default' => 'openai',
+            'providers' => [
+                'openai' => [
+                    'model' => 'gpt-4',
+                ],
             ],
         ];
 
         file_put_contents($this->tempSettingsPath, json_encode($config));
         $settings = new Settings($this->tempSettingsPath);
 
-        $this->assertSame('openai', $settings->get('provider.type'));
-        $this->assertSame('gpt-4', $settings->get('provider.model'));
+        $this->assertSame('openai', $settings->get('default'));
+        $this->assertSame('gpt-4', $settings->get('providers.openai.model'));
     }
 
     public function testGetSupportsDotNotation(): void
     {
         $config = [
-            'anthropic' => [
-                'api_key' => 'sk-123',
-                'model' => 'claude-3',
+            'providers' => [
+                'anthropic' => [
+                    'api_key' => 'sk-123',
+                    'model' => 'claude-3',
+                ],
             ],
         ];
 
         file_put_contents($this->tempSettingsPath, json_encode($config));
         $settings = new Settings($this->tempSettingsPath);
 
-        $this->assertSame('sk-123', $settings->get('anthropic.api_key'));
-        $this->assertSame('claude-3', $settings->get('anthropic.model'));
+        $this->assertSame('sk-123', $settings->get('providers.anthropic.api_key'));
+        $this->assertSame('claude-3', $settings->get('providers.anthropic.model'));
     }
 
     public function testGetWithDotNotationReturnsDefaultForMissingKey(): void
     {
-        $config = ['anthropic' => ['api_key' => 'test']];
+        $config = ['providers' => ['anthropic' => ['api_key' => 'test']]];
         file_put_contents($this->tempSettingsPath, json_encode($config));
         $settings = new Settings($this->tempSettingsPath);
 
-        $this->assertNull($settings->get('anthropic.nonexistent'));
-        $this->assertSame('default', $settings->get('anthropic.nonexistent', 'default'));
+        $this->assertNull($settings->get('providers.anthropic.nonexistent'));
+        $this->assertSame('default', $settings->get('providers.anthropic.nonexistent', 'default'));
     }
 
     public function testGetWithDeeplyNestedDotNotation(): void
@@ -163,9 +169,11 @@ class SettingsTest extends TestCase
     public function testAllReturnsSettingsArray(): void
     {
         $config = [
-            'provider' => [
-                'type' => 'anthropic',
-                'api_key' => 'test-key',
+            'default' => 'anthropic',
+            'providers' => [
+                'anthropic' => [
+                    'api_key' => 'test-key',
+                ],
             ],
         ];
 
@@ -185,9 +193,11 @@ class SettingsTest extends TestCase
     public function testProviderReturnsAiProvider(): void
     {
         $config = [
-            'provider' => [
-                'type' => 'anthropic',
-                'api_key' => 'test-key',
+            'default' => 'anthropic',
+            'providers' => [
+                'anthropic' => [
+                    'api_key' => 'test-key',
+                ],
             ],
         ];
 
@@ -203,7 +213,12 @@ class SettingsTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $config = ['provider' => ['type' => 'anthropic']];
+        $config = [
+            'default' => 'anthropic',
+            'providers' => [
+                'anthropic' => [],
+            ],
+        ];
         file_put_contents($this->tempSettingsPath, json_encode($config));
 
         $settings = new Settings($this->tempSettingsPath);
@@ -231,9 +246,17 @@ class SettingsTest extends TestCase
         );
         $mockFactory->expects($this->once())
             ->method('create')
+            ->with('anthropic', $this->arrayHasKey('anthropic'))
             ->willReturn($mockProvider);
 
-        $config = ['provider' => ['type' => 'anthropic', 'api_key' => 'test']];
+        $config = [
+            'default' => 'anthropic',
+            'providers' => [
+                'anthropic' => [
+                    'api_key' => 'test',
+                ],
+            ],
+        ];
         file_put_contents($this->tempSettingsPath, json_encode($config));
 
         $settings = new Settings($this->tempSettingsPath);
@@ -244,7 +267,14 @@ class SettingsTest extends TestCase
 
     public function testMcpServersReturnsEmptyArrayWhenNoServersConfigured(): void
     {
-        $config = ['provider' => ['type' => 'anthropic', 'api_key' => 'test']];
+        $config = [
+            'default' => 'anthropic',
+            'providers' => [
+                'anthropic' => [
+                    'api_key' => 'test',
+                ],
+            ],
+        ];
         file_put_contents($this->tempSettingsPath, json_encode($config));
 
         $settings = new Settings($this->tempSettingsPath);
@@ -256,7 +286,12 @@ class SettingsTest extends TestCase
     public function testMcpServersSkipsInvalidServerConfigurations(): void
     {
         $config = [
-            'provider' => ['type' => 'anthropic', 'api_key' => 'test'],
+            'default' => 'anthropic',
+            'providers' => [
+                'anthropic' => [
+                    'api_key' => 'test',
+                ],
+            ],
             'mcp_servers' => [
                 'filesystem' => [
                     'command' => 'echo',
@@ -276,7 +311,12 @@ class SettingsTest extends TestCase
     public function testMcpServersSkipsInvalidConfigurations(): void
     {
         $config = [
-            'provider' => ['type' => 'anthropic', 'api_key' => 'test'],
+            'default' => 'anthropic',
+            'providers' => [
+                'anthropic' => [
+                    'api_key' => 'test',
+                ],
+            ],
             'mcp_servers' => [
                 'valid' => ['command' => 'echo', 'args' => ['test']],
                 'invalid' => ['invalid' => 'config'],

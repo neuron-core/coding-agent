@@ -72,10 +72,12 @@ It will start an interactive setup wizard.
 
 ```json
 {
-    "provider": {
-        "type": "anthropic",
-        "api_key": "sk-ant-your-api-key-here",
-        "model": "claude-sonnet-4-6",
+    "default": "anthropic",
+    "providers": {
+        "anthropic": {
+            "api_key": "sk-ant-your-api-key-here",
+            "model": "claude-sonnet-4-6"
+        }
     }
 }
 ```
@@ -84,10 +86,12 @@ It will start an interactive setup wizard.
 
 ```json
 {
-    "provider": {
-        "type": "openai",
-        "api_key": "sk-your-openai-key-here",
-        "model": "gpt-4",
+    "default": "openai",
+    "providers": {
+        "openai": {
+            "api_key": "sk-your-openai-key-here",
+            "model": "gpt-4"
+        }
     }
 }
 ```
@@ -96,10 +100,12 @@ It will start an interactive setup wizard.
 
 ```json
 {
-    "provider": {
-        "type": "gemini",
-        "api_key": "your-gemini-api-key",
-        "model": "gemini-3-pro-preview",
+    "default": "gemini",
+    "providers": {
+        "gemini": {
+            "api_key": "your-gemini-api-key",
+            "model": "gemini-3-pro-preview"
+        }
     }
 }
 ```
@@ -108,10 +114,12 @@ It will start an interactive setup wizard.
 
 ```json
 {
-    "provider": {
-        "type": "ollama",
-        "base_url": "http://localhost:11434",
-        "model": "llama2"
+    "default": "ollama",
+    "providers": {
+        "ollama": {
+            "base_url": "http://localhost:11434",
+            "model": "llama2"
+        }
     }
 }
 ```
@@ -135,9 +143,8 @@ If no `context_file` is specified, the agent will look for `Agents.md` in the pr
 
 ```json
 {
-    "provider": {
-        "type": "anthropic",
-        "api_key": "sk-ant-your-api-key-here"
+    "providers": {
+        ...
     },
     "context_file": "CLAUDE.md"
 }
@@ -149,7 +156,7 @@ Add Model Context Protocol servers to extend the agent's capabilities:
 
 ```json
 {
-    "provider": {
+    "providers": {
         ...
     },
     "mcp_servers": {
@@ -198,7 +205,7 @@ To enable agent monitoring you just need to add the `inspector_key` field to you
 
 ```json
 {
-    "provider": {
+    "providers": {
         ...
     },
     "inspector_key": "INSPECTOR_INGESTION_KEY"

@@ -18,7 +18,6 @@ use RuntimeException;
 
 use function array_keys;
 use function implode;
-use function is_array;
 use function sprintf;
 use function strtolower;
 
@@ -62,27 +61,20 @@ class ProviderFactory implements ProviderFactoryInterface
     /**
      * Create a provider instance based on the settings array.
      *
-     * @throws RuntimeException if provider cannot be created
+     * @throws RuntimeException if the provider cannot be created
      */
-    public function create(array $config): AIProviderInterface
+    public function create(string $type, array $list): AIProviderInterface
     {
-        // Enforce strict format: provider must be a nested object with 'type' key
-        if (!isset($config['provider']) || !is_array($config['provider']) || !isset($config['provider']['type'])) {
-            throw new RuntimeException(
-                'Invalid provider configuration. Expected format: {"provider": {"type": "anthropic", ...}}'
-            );
-        }
+        $lowerType = strtolower($type);
 
-        $type = strtolower((string) $config['provider']['type']);
-
-        if (!isset($this->factories[$type])) {
+        if (!isset($this->factories[$lowerType])) {
             throw new RuntimeException(
                 sprintf('Unknown provider "%s". Available providers: %s', $type, implode(', ', array_keys($this->factories)))
             );
         }
 
         // Pass only the provider config to the factory methods
-        return ($this->factories[$type])($config['provider']);
+        return ($this->factories[$lowerType])($list[$lowerType]);
     }
 
     /**
@@ -90,15 +82,15 @@ class ProviderFactory implements ProviderFactoryInterface
      */
     private function registerDefaultFactories(): void
     {
-        $this->factories['anthropic'] = fn (array $settings): \NeuronAI\Providers\Anthropic\Anthropic => $this->createAnthropic($settings);
-        $this->factories['openai'] = fn (array $settings): \NeuronAI\Providers\OpenAI\OpenAI => $this->createOpenAI($settings);
-        $this->factories['openailike'] = fn (array $settings): \NeuronAI\Providers\OpenAILike => $this->createOpenAILike($settings);
-        $this->factories['gemini'] = fn (array $settings): \NeuronAI\Providers\Gemini\Gemini => $this->createGemini($settings);
-        $this->factories['cohere'] = fn (array $settings): \NeuronAI\Providers\Cohere\Cohere => $this->createCohere($settings);
-        $this->factories['mistral'] = fn (array $settings): \NeuronAI\Providers\Mistral\Mistral => $this->createMistral($settings);
-        $this->factories['ollama'] = fn (array $settings): \NeuronAI\Providers\Ollama\Ollama => $this->createOllama($settings);
-        $this->factories['xai'] = $this->factories['grok'] = fn (array $settings): \NeuronAI\Providers\XAI\Grok => $this->createGrok($settings);
-        $this->factories['deepseek'] = fn (array $settings): \NeuronAI\Providers\Deepseek\Deepseek => $this->createDeepseek($settings);
+        $this->factories['anthropic'] = fn (array $settings): AIProviderInterface => $this->createAnthropic($settings);
+        $this->factories['openai'] = fn (array $settings): AIProviderInterface => $this->createOpenAI($settings);
+        $this->factories['openailike'] = fn (array $settings): AIProviderInterface => $this->createOpenAILike($settings);
+        $this->factories['gemini'] = fn (array $settings): AIProviderInterface => $this->createGemini($settings);
+        $this->factories['cohere'] = fn (array $settings): AIProviderInterface => $this->createCohere($settings);
+        $this->factories['mistral'] = fn (array $settings): AIProviderInterface => $this->createMistral($settings);
+        $this->factories['ollama'] = fn (array $settings): AIProviderInterface => $this->createOllama($settings);
+        $this->factories['xai'] = $this->factories['grok'] = fn (array $settings): AIProviderInterface => $this->createGrok($settings);
+        $this->factories['deepseek'] = fn (array $settings): AIProviderInterface => $this->createDeepseek($settings);
     }
 
     private function createAnthropic(array $settings): Anthropic
