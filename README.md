@@ -66,7 +66,7 @@ Navigate to the project directory you want to use Maestro in and run the command
 maestro init
 ```
 
-It will start an interactive setup wizard.
+It will start an interactive setup wizard that guides you through the configuration process.
 
 #### Anthropic
 
