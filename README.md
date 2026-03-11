@@ -20,6 +20,12 @@ While most AI coding agents are written in Python or TypeScript, Maestro demonst
 - **Sophisticated Output Rendering**: Beautiful diffs, colored syntax highlighting, and intuitive tool call visualization
 - **Event-Driven Design**: A clean PSR-14 event system and an inline command registry make the tool easier to extend
 
+## Full Introduction
+
+For a full introduction to the project architecture, you can read the complete article:
+
+https://inspector.dev/building-a-coding-agent-in-php-a-walk-through-maestro/
+
 ## Requirements
 
 - PHP >= 8.1
@@ -198,7 +204,7 @@ When the agent proposes a tool operation, you'll be prompted to approve it. Choo
 - **Always allow**: Approve permanently (saved to the settings file)
 - **Deny**: Reject this operation
 
-## Montoring Maestro sessions
+## Monitoring Maestro sessions
 
 Neuron AI is natively integrated with [Inspector](https://inspector.dev), allowing you to monitor and analyze your AI coding sessions.
 To enable agent monitoring you just need to add the `inspector_key` field to your `.maestro/settings.json` file:
@@ -213,49 +219,6 @@ To enable agent monitoring you just need to add the `inspector_key` field to you
 ```
 
 You can get an `INSPECTOR_INGESTION_KEY` from the [Inspector dashboard](https://app.inspector.dev/register).
-
-## Architecture Overview
-
-Maestro is built on a clean, modular architecture:
-
-```
-bin/maestro
-  └─ MaestroCommand (Symfony Console)
-       ├─ Settings (loads .maestro/settings.json)
-       ├─ EventDispatcher + CliOutputListener
-       └─ AgentOrchestrator
-            └─ CodingAgent (extends NeuronAI Agent)
-                 ├─ ProviderFactory → AIProviderInterface
-                 ├─ FileSystemToolkit (read-only FS tools)
-                 └─ McpConnector[] (optional MCP servers)
-```
-
-### Key Components
-
-- **`CodingAgent`**: Extends `NeuronAI\Agent\Agent` with a tool approval middleware that interrupts execution for user confirmation
-- **`AgentOrchestrator`**: Drives the chat loop, catching workflow interrupts and dispatching approval events
-- **`MaestroCommand`**: Symfony Console entry point that bootstraps settings and runs the interactive REPL
-- **`Settings`**: Loads `.maestro/settings.json` with dot-notation access and persistent `allowed_tools` tracking
-- **`ProviderFactory`**: Maps provider types (`anthropic`, `openai`, `gemini`, `cohere`, `mistral`, `ollama`, `xai`/`grok`, `deepseek`) to Neuron AI provider instances
-
-### Event System
-
-A lightweight PSR-14-compatible dispatcher flows three events:
-
-| Event | Trigger |
-|---|---|
-| `AgentThinkingEvent` | Before each AI call |
-| `AgentResponseEvent` | When AI returns a message |
-| `ToolApprovalRequestedEvent` | When tool approval is needed |
-
-### Rendering Pipeline
-
-Beautiful tool call visualization through the rendering system:
-
-- **`ToolRendererMap`**: Registry mapping tool names to specialized renderers
-- **`SnippetRenderer`**: Shows key argument fields (file paths, patterns, etc.)
-- **`FileChangeRenderer`**: Produces unified diffs with ANSI coloring via `DiffRenderer`
-- **`DiffRenderer`**: Wraps Tempest Highlighter with `DiffTerminalTheme`
 
 ## Contributing
 
