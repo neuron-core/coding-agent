@@ -22,7 +22,7 @@ While most AI coding agents are written in Python or TypeScript, Maestro demonst
 
 ## Full Introduction
 
-For a full introduction to the project architecture, you can read the complete article:
+For a full introduction to the project architecture, you can read the article below:
 
 https://inspector.dev/building-a-coding-agent-in-php-a-walk-through-maestro/
 
@@ -197,7 +197,10 @@ maestro
 
 ### Tool Approval
 
-When the agent proposes a tool operation, you'll be prompted to approve it. Choose from:
+When the agent proposes a tool operation, you'll be prompted to approve it. The human-in-the-loop system is powered by the
+Neuron AI [Tool Approval](https://docs.neuron-ai.dev/agent/middleware#tool-approval-human-in-the-loop) middleware.
+
+You can Choose from:
 
 - **Allow once**: Approve this specific operation
 - **Allow for session**: Approve all operations of this type during the current session
