@@ -16,6 +16,7 @@ use NeuronAI\Exceptions\WorkflowException;
 use NeuronAI\MCP\McpConnector;
 use NeuronAI\Observability\InspectorObserver;
 use NeuronCore\Maestro\Agent\Middleware\MemoryMiddleware;
+use NeuronCore\Maestro\Extension\Registry\ToolRegistry;
 use NeuronCore\Maestro\Settings\SettingsInterface;
 use NeuronAI\Providers\AIProviderInterface;
 use NeuronAI\Tools\Toolkits\FileSystem\FileSystemToolkit;
@@ -38,12 +39,14 @@ use function trim;
 class MaestroAgent extends Agent
 {
     /**
-     * Constructor - Initialize with settings loader.
+     * Constructor - Initialize with settings and tool registry.
      *
      * @throws WorkflowException|InspectorException
      */
-    public function __construct(protected SettingsInterface $settings)
-    {
+    public function __construct(
+        protected SettingsInterface $settings,
+        private readonly ToolRegistry $toolRegistry,
+    ) {
         parent::__construct();
 
         $this->observe(InspectorObserver::instance(
@@ -85,6 +88,8 @@ class MaestroAgent extends Agent
     }
 
     /**
+     * Get tools from registry plus core tools.
+     *
      * @throws Exception
      */
     protected function tools(): array
@@ -100,7 +105,10 @@ class MaestroAgent extends Agent
                     ...$connector->tools(),
                 ],
                 [],
-            )
+            ),
+
+            // Load tools from extensions
+            ...$this->toolRegistry->list(),
         ];
     }
 

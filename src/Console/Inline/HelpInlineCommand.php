@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace NeuronCore\Maestro\Console\Inline;
 
 use NeuronCore\Maestro\Console\Text;
+use NeuronCore\Maestro\Extension\Registry\CommandRegistry;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,7 +19,7 @@ use function strlen;
 class HelpInlineCommand implements InlineCommand
 {
     public function __construct(
-        private readonly InlineCommandRegistry $registry
+        private readonly CommandRegistry $registry
     ) {
     }
 

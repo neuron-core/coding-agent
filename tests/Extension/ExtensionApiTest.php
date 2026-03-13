@@ -1,0 +1,115 @@
+<?php
+
+declare(strict_types=1);
+
+namespace NeuronCore\Maestro\Tests\Extension;
+
+use NeuronAI\Tools\ToolInterface;
+use NeuronCore\Maestro\Console\Inline\InlineCommand;
+use NeuronCore\Maestro\Extension\ExtensionApi;
+use NeuronCore\Maestro\Extension\Registry\CommandRegistry;
+use NeuronCore\Maestro\Extension\Registry\EventRegistry;
+use NeuronCore\Maestro\Extension\Registry\RendererRegistry;
+use NeuronCore\Maestro\Extension\Registry\ToolRegistry;
+use NeuronCore\Maestro\Rendering\ToolRenderer;
+use PHPUnit\Framework\TestCase;
+
+class ExtensionApiTest extends TestCase
+{
+    private ToolRegistry $tools;
+    private CommandRegistry $commands;
+    private RendererRegistry $renderers;
+    private EventRegistry $events;
+    private ExtensionApi $api;
+
+    protected function setUp(): void
+    {
+        $this->tools = new ToolRegistry();
+        $this->commands = new CommandRegistry();
+        $this->renderers = new RendererRegistry($this->createMockRenderer());
+        $this->events = new EventRegistry();
+
+        $this->api = new ExtensionApi(
+            $this->tools,
+            $this->commands,
+            $this->renderers,
+            $this->events,
+        );
+    }
+
+    public function testRegisterToolAddsToRegistry(): void
+    {
+        $tool = $this->createMockTool('test_tool');
+
+        $this->api->registerTool($tool);
+
+        $this->assertTrue($this->tools->has('test_tool'));
+    }
+
+    public function testRegisterCommandAddsToRegistry(): void
+    {
+        $command = $this->createCommandMock('test', 'Test command');
+
+        $this->api->registerCommand($command);
+
+        $this->assertTrue($this->commands->has('test'));
+    }
+
+    public function testRegisterRendererAddsToRegistry(): void
+    {
+        $renderer = $this->createMockRenderer();
+
+        $this->api->registerRenderer('my_tool', $renderer);
+
+        $this->assertTrue($this->renderers->has('my_tool'));
+    }
+
+    public function testOnAddsEventHandlerToRegistry(): void
+    {
+        $handler = fn () => null;
+
+        $this->api->on('test.event', $handler);
+
+        $this->assertTrue($this->events->has('test.event'));
+    }
+
+    public function testToolsReturnsSameRegistry(): void
+    {
+        $this->assertSame($this->tools, $this->api->tools());
+    }
+
+    public function testCommandsReturnsSameRegistry(): void
+    {
+        $this->assertSame($this->commands, $this->api->commands());
+    }
+
+    public function testRenderersReturnsSameRegistry(): void
+    {
+        $this->assertSame($this->renderers, $this->api->renderers());
+    }
+
+    public function testEventsReturnsSameRegistry(): void
+    {
+        $this->assertSame($this->events, $this->api->events());
+    }
+
+    private function createMockTool(string $name): ToolInterface
+    {
+        $mock = $this->createMock(ToolInterface::class);
+        $mock->method('getName')->willReturn($name);
+        return $mock;
+    }
+
+    private function createCommandMock(string $name, string $description): InlineCommand
+    {
+        $mock = $this->createMock(InlineCommand::class);
+        $mock->method('getName')->willReturn($name);
+        $mock->method('getDescription')->willReturn($description);
+        return $mock;
+    }
+
+    private function createMockRenderer(): ToolRenderer
+    {
+        return $this->createMock(ToolRenderer::class);
+    }
+}

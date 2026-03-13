@@ -1,0 +1,182 @@
+# Maestro Extension System
+
+Extensions allow you to customize Maestro by adding custom tools, commands, renderers, and event handlers.
+
+## Creating an Extension
+
+An extension is a PHP class that implements `ExtensionInterface`:
+
+```php
+<?php
+
+namespace MyVendor\MyExtension;
+
+use NeuronCore\Maestro\Extension\ExtensionInterface;
+use NeuronCore\Maestro\Extension\ExtensionApi;
+use NeuronCore\Maestro\Console\Inline\InlineCommand;
+use NeuronAI\Tools\ToolInterface;
+use NeuronCore\Maestro\Rendering\ToolRenderer;
+
+class MyExtension implements ExtensionInterface
+{
+    public function name(): string
+    {
+        return 'my-extension';
+    }
+
+    public function register(ExtensionApi $api): void
+    {
+        // Register an AI tool
+        $api->registerTool($myTool);
+
+        // Register an inline command
+        $api->registerCommand($myCommand);
+
+        // Register a custom renderer for a tool
+        $api->registerRenderer('my_tool', $myRenderer);
+
+        // Register an event handler
+        $api->on('AgentResponseEvent', function ($event, $context) {
+            // Handle event
+        });
+    }
+}
+```
+
+## Extension API
+
+The `ExtensionApi` provides the following registration methods:
+
+| Method | Purpose |
+|---------|-----------|
+| `registerTool(ToolInterface $tool)` | Register an AI tool that the agent can use |
+| `registerCommand(InlineCommand $command)` | Register an inline command (e.g., `/status`) |
+| `registerRenderer(string $toolName, ToolRenderer $renderer)` | Register a custom renderer for tool output |
+| `on(string $event, callable $handler)` | Register a callback for an event |
+| `tools()` | Get the tool registry for advanced registration |
+| `commands()` | Get the command registry for advanced registration |
+| `renderers()` | Get the renderer registry for advanced registration |
+| `events()` | Get the event registry for advanced registration |
+
+## Registering an Inline Command
+
+Inline commands are available in the interactive console (prefix with `/`):
+
+```php
+use NeuronCore\Maestro\Console\Inline\InlineCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+final class MyCommand implements InlineCommand
+{
+    public function getName(): string
+    {
+        return 'my-command';
+    }
+
+    public function getDescription(): string
+    {
+        return 'My custom command description';
+    }
+
+    public function execute(string $args, InputInterface $input, OutputInterface $output): void
+    {
+        $output->writeln('Hello from my command!');
+    }
+}
+```
+
+## Registering an Event Handler
+
+Extensions can react to application events:
+
+```php
+$api->on('AgentThinkingEvent', function ($event, $context) {
+    // Before AI thinks
+});
+
+$api->on('AgentResponseEvent', function ($event, $context) {
+    // After AI responds
+});
+
+$api->on('ToolApprovalRequestedEvent', function ($event, $context) {
+    // When tool approval is requested
+});
+```
+
+## Loading Extensions
+
+Add your extension to `.maestro/settings.json`:
+
+```json
+{
+    "extensions": [
+        {
+            "class": "MyVendor\\MyExtension\\MyExtension",
+            "enabled": true,
+            "config": {
+                "api_key": "your-api-key"
+            }
+        }
+    ]
+}
+```
+
+Access config in your extension:
+
+```php
+class MyExtension implements ExtensionInterface
+{
+    private array $config;
+
+    public function __construct(array $config = [])
+    {
+        $this->config = $config;
+    }
+
+    // ... rest of implementation
+
+    public function register(ExtensionApi $api): void
+    {
+        $apiKey = $this->config['api_key'] ?? null;
+        // Use the config
+    }
+}
+```
+
+## Available Events
+
+| Event | When Fired |
+|--------|-------------|
+| `AgentThinkingEvent` | Before the AI agent starts thinking |
+| `AgentResponseEvent` | After the AI agent responds with content |
+| `ToolApprovalRequestedEvent` | When a tool requires user approval |
+
+## Packaging an Extension
+
+Create a Composer package for your extension:
+
+`composer.json`:
+```json
+{
+    "name": "my-vendor/my-extension",
+    "type": "library",
+    "description": "My Maestro extension",
+    "require": {
+        "neuron-core/maestro": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MyVendor\\MyExtension\\": "src/"
+        }
+    }
+}
+```
+
+Users can then install your extension:
+
+```bash
+composer require my-vendor/my-extension
+```
+
+And configure it in `.maestro/settings.json`.

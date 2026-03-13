@@ -8,14 +8,19 @@ use Exception;
 use NeuronCore\Maestro\Agent\MaestroAgent;
 use NeuronCore\Maestro\Console\Inline\HelpInlineCommand;
 use NeuronCore\Maestro\Console\Inline\InitInlineCommand;
-use NeuronCore\Maestro\Console\Inline\InlineCommandRegistry;
 use NeuronCore\Maestro\Console\Text;
 use NeuronCore\Maestro\EventBus\EventDispatcher;
 use NeuronCore\Maestro\Events\AgentResponseEvent;
 use NeuronCore\Maestro\Events\AgentThinkingEvent;
 use NeuronCore\Maestro\Events\ToolApprovalRequestedEvent;
+use NeuronCore\Maestro\Extension\ExtensionLoader;
+use NeuronCore\Maestro\Extension\Registry\CommandRegistry;
 use NeuronCore\Maestro\Listeners\CliOutputListener;
 use NeuronCore\Maestro\Orchestrator\AgentOrchestrator;
+use NeuronCore\Maestro\Rendering\Renderers\EditFileRenderer;
+use NeuronCore\Maestro\Rendering\Renderers\FileChangeRenderer;
+use NeuronCore\Maestro\Rendering\Renderers\GenericRenderer;
+use NeuronCore\Maestro\Rendering\Renderers\SnippetRenderer;
 use NeuronCore\Maestro\Rendering\ToolRendererMap;
 use NeuronCore\Maestro\Settings\Settings;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -43,17 +48,7 @@ use const STDIN;
 )]
 class MaestroCommand extends Command
 {
-    protected InlineCommandRegistry $registry;
-
-    public function __construct(?string $name = null, ?callable $code = null)
-    {
-        parent::__construct($name, $code);
-
-        // Initialize inline commands
-        $this->registry = new InlineCommandRegistry();
-        $this->registry->register(new InitInlineCommand());
-        $this->registry->register(new HelpInlineCommand($this->registry));
-    }
+    private ExtensionLoader $loader;
 
     /**
      * @throws Throwable
@@ -89,14 +84,44 @@ class MaestroCommand extends Command
             return Command::FAILURE;
         }
 
+        // Create extension loader
+        $fallbackRenderer = new GenericRenderer();
+        $this->loader = ExtensionLoader::create($fallbackRenderer);
+
+        // Create ToolRendererMap for CliOutputListener
+        $toolRendererMap = new ToolRendererMap($fallbackRenderer);
+        $this->registerCoreRenderers($toolRendererMap);
+
+        // Load extensions from settings
+        try {
+            $this->loader->load($settings->all());
+        } catch (Exception $e) {
+            $output->writeln(Text::content('Failed to load extensions: ' . $e->getMessage())->red()->build());
+            $output->writeln('');
+            // Continue without extensions
+        }
+
+        // Register core commands
+        $this->registerCoreCommands($this->loader->commands());
+
+        // Register extension event handlers with the dispatcher
         $dispatcher = new EventDispatcher();
-        $listener = new CliOutputListener($input, $output, $settings, ToolRendererMap::default());
+        foreach ($this->loader->events()->registeredEvents() as $event) {
+            foreach ($this->loader->events()->handlersFor($event) as $handler) {
+                $dispatcher->subscribe($event, $handler);
+            }
+        }
+
+        $listener = new CliOutputListener($input, $output, $settings, $toolRendererMap);
 
         $dispatcher->subscribe(AgentThinkingEvent::class, $listener->onThinking(...));
         $dispatcher->subscribe(AgentResponseEvent::class, $listener->onResponse(...));
         $dispatcher->subscribe(ToolApprovalRequestedEvent::class, $listener->onToolApprovalRequested(...));
 
-        $orchestrator = new AgentOrchestrator(MaestroAgent::make($settings), $dispatcher);
+        $orchestrator = new AgentOrchestrator(
+            new MaestroAgent($settings, $this->loader->tools()),
+            $dispatcher,
+        );
 
         $this->printIntro($output);
 
@@ -113,9 +138,9 @@ class MaestroCommand extends Command
             if (str_starts_with($userInput, '/')) {
                 [$commandName, $args] = $this->readInlineCommand($userInput);
 
-                if ($this->registry->has($commandName)) {
+                if ($this->loader->commands()->has($commandName)) {
                     try {
-                        $this->registry->get($commandName)->execute($args, $input, $output);
+                        $this->loader->commands()->get($commandName)->execute($args, $input, $output);
                     } catch (Exception $e) {
                         $output->writeln(Text::content('Command error: ' . $e->getMessage())->red()->build() . "\n");
                     }
@@ -157,6 +182,32 @@ class MaestroCommand extends Command
         $commandName = $parts[0];
         $args = $parts[1] ?? '';
         return [$commandName, $args];
+    }
+
+    /**
+     * Register core inline commands.
+     */
+    private function registerCoreCommands(CommandRegistry $registry): void
+    {
+        $registry->register(new InitInlineCommand());
+        $registry->register(new HelpInlineCommand($registry));
+    }
+
+    /**
+     * Register core tool renderers.
+     */
+    private function registerCoreRenderers(ToolRendererMap $map): void
+    {
+        $fileChange = new FileChangeRenderer();
+
+        $map->register('read_file', new SnippetRenderer(['file_path']));
+        $map->register('parse_file', new SnippetRenderer(['file_path']));
+        $map->register('grep_file_content', new SnippetRenderer(['pattern', 'file_path']));
+        $map->register('glob_path', new SnippetRenderer(['pattern', 'directory']));
+        $map->register('bash', new SnippetRenderer(['command']));
+        $map->register('edit_file', new EditFileRenderer());
+        $map->register('write_file', $fileChange);
+        $map->register('delete_file', $fileChange);
     }
 
     protected function printIntro(OutputInterface $output): void
