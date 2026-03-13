@@ -11,6 +11,11 @@ use NeuronCore\Maestro\Extension\Registry\CommandRegistry;
 use NeuronCore\Maestro\Extension\Registry\EventRegistry;
 use NeuronCore\Maestro\Extension\Registry\RendererRegistry;
 use NeuronCore\Maestro\Extension\Registry\ToolRegistry;
+use NeuronCore\Maestro\Extension\Ui\SlotRegistry;
+use NeuronCore\Maestro\Extension\Ui\Theme\DarkTheme;
+use NeuronCore\Maestro\Extension\Ui\UiBuilder;
+use NeuronCore\Maestro\Extension\Ui\WidgetInterface;
+use NeuronCore\Maestro\Extension\Ui\WidgetRegistry;
 use NeuronCore\Maestro\Rendering\ToolRenderer;
 use PHPUnit\Framework\TestCase;
 
@@ -29,11 +34,18 @@ class ExtensionApiTest extends TestCase
         $this->renderers = new RendererRegistry($this->createMockRenderer());
         $this->events = new EventRegistry();
 
+        $ui = new UiBuilder(
+            new DarkTheme(),
+            new SlotRegistry(),
+            new WidgetRegistry(),
+        );
+
         $this->api = new ExtensionApi(
             $this->tools,
             $this->commands,
             $this->renderers,
             $this->events,
+            $ui,
         );
     }
 
@@ -91,6 +103,21 @@ class ExtensionApiTest extends TestCase
     public function testEventsReturnsSameRegistry(): void
     {
         $this->assertSame($this->events, $this->api->events());
+    }
+
+    public function testRegisterWidgetAddsToWidgetRegistry(): void
+    {
+        $widgets = new WidgetRegistry();
+        $ui = new UiBuilder(new DarkTheme(), new SlotRegistry(), $widgets);
+        $api = new ExtensionApi($this->tools, $this->commands, $this->renderers, $this->events, $ui);
+
+        $widget = $this->createMock(WidgetInterface::class);
+        $widget->method('name')->willReturn('my_widget');
+        $widget->method('contentType')->willReturn('status');
+
+        $api->registerWidget($widget);
+
+        $this->assertTrue($widgets->has('my_widget'));
     }
 
     private function createMockTool(string $name): ToolInterface

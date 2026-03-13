@@ -180,3 +180,16 @@ composer require my-vendor/my-extension
 ```
 
 And configure it in `.maestro/settings.json`.
+
+## UI Customization
+
+Extensions can fully customize the terminal interface through slots, themes, and widgets via `$api->ui()`:
+
+```php
+$api->ui()->addToSlot(SlotType::HEADER, 'My Custom Header', priority: 100);
+$api->ui()->addToSlot(SlotType::STATUS_BAR, ' ⎇ main ', priority: 500);
+$api->registerWidget(new MyStatusWidget());
+$api->ui()->registerTheme(new MyCompanyTheme());
+```
+
+For complete documentation on slots, themes, text formatting, icons, and widgets — including how multiple extensions interact and what each call visually produces — see the **[UI System README](Ui/README.md)**.

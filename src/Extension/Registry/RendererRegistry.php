@@ -11,13 +11,13 @@ use function array_keys;
 /**
  * Registry for tool renderers that extensions can register.
  */
-final class RendererRegistry
+class RendererRegistry
 {
     /** @var array<string, ToolRenderer> */
-    private array $map = [];
+    protected array $map = [];
 
     public function __construct(
-        private readonly ToolRenderer $fallback,
+        protected readonly ToolRenderer $fallback,
     ) {
     }
 

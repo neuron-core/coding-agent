@@ -48,7 +48,7 @@ use const STDIN;
 )]
 class MaestroCommand extends Command
 {
-    private ExtensionLoader $loader;
+    protected ExtensionLoader $loader;
 
     /**
      * @throws Throwable

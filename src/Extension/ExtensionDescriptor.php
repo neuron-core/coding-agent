@@ -7,7 +7,7 @@ namespace NeuronCore\Maestro\Extension;
 /**
  * Describes a loaded extension and its state.
  */
-final class ExtensionDescriptor
+class ExtensionDescriptor
 {
     public function __construct(
         public readonly string $className,

@@ -9,10 +9,10 @@ use function array_keys;
 /**
  * Registry for event handlers that extensions can register.
  */
-final class EventRegistry
+class EventRegistry
 {
     /** @var array<string, array<int, callable>> */
-    private array $handlers = [];
+    protected array $handlers = [];
 
     /**
      * Register a callback for a specific event.

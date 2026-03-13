@@ -8,6 +8,10 @@ use NeuronCore\Maestro\Extension\Registry\CommandRegistry;
 use NeuronCore\Maestro\Extension\Registry\EventRegistry;
 use NeuronCore\Maestro\Extension\Registry\RendererRegistry;
 use NeuronCore\Maestro\Extension\Registry\ToolRegistry;
+use NeuronCore\Maestro\Extension\Ui\SlotRegistry;
+use NeuronCore\Maestro\Extension\Ui\Theme\DarkTheme;
+use NeuronCore\Maestro\Extension\Ui\UiEngine;
+use NeuronCore\Maestro\Extension\Ui\WidgetRegistry;
 use NeuronCore\Maestro\Rendering\ToolRenderer;
 use Throwable;
 use InvalidArgumentException;
@@ -19,17 +23,21 @@ use function sprintf;
 /**
  * Loads and initializes extensions from configuration.
  */
-final class ExtensionLoader
+class ExtensionLoader
 {
     /** @var array<ExtensionDescriptor> */
-    private array $descriptors = [];
+    protected array $descriptors = [];
+
+    protected ?UiEngine $uiEngine = null;
 
     public function __construct(
-        private readonly ToolRegistry $tools,
-        private readonly CommandRegistry $commands,
-        private readonly RendererRegistry $renderers,
-        private readonly EventRegistry $events,
+        protected readonly ToolRegistry $tools,
+        protected readonly CommandRegistry $commands,
+        protected readonly RendererRegistry $renderers,
+        protected readonly EventRegistry $events,
+        ?UiEngine $uiEngine = null,
     ) {
+        $this->uiEngine = $uiEngine;
     }
 
     /**
@@ -45,7 +53,7 @@ final class ExtensionLoader
         foreach ($extensions as $config) {
             $className = $config['class'] ?? null;
             $enabled = $config['enabled'] ?? true;
-            $config = $config['config'] ?? [];
+            $extensionConfig = $config['config'] ?? [];
             if ($className === null) {
                 continue;
             }
@@ -57,7 +65,7 @@ final class ExtensionLoader
                 className: $className,
                 name: $className,
                 enabled: $enabled,
-                config: $config,
+                config: $extensionConfig,
             );
 
             if ($enabled) {
@@ -76,10 +84,12 @@ final class ExtensionLoader
      * @throws InvalidArgumentException if the class doesn't implement ExtensionInterface
      * @throws RuntimeException if the extension fails to initialize
      */
-    private function initialize(ExtensionDescriptor $descriptor): void
+    protected function initialize(ExtensionDescriptor $descriptor): void
     {
         try {
-            $instance = new $descriptor->className();
+            $instance = $descriptor->config !== []
+                ? new $descriptor->className($descriptor->config)
+                : new $descriptor->className();
 
             if (!$instance instanceof ExtensionInterface) {
                 throw new InvalidArgumentException(
@@ -87,11 +97,18 @@ final class ExtensionLoader
                 );
             }
 
+            $uiEngine = $this->uiEngine ??= new UiEngine(
+                new DarkTheme(),
+                new SlotRegistry(),
+                new WidgetRegistry(),
+            );
+
             $api = new ExtensionApi(
                 tools: $this->tools,
                 commands: $this->commands,
                 renderers: $this->renderers,
                 events: $this->events,
+                ui: $uiEngine->createBuilder(),
             );
 
             $instance->register($api);
@@ -152,6 +169,19 @@ final class ExtensionLoader
             commands: new CommandRegistry(),
             renderers: new RendererRegistry($fallbackRenderer),
             events: new EventRegistry(),
+            uiEngine: new UiEngine(
+                new DarkTheme(),
+                new SlotRegistry(),
+                new WidgetRegistry(),
+            ),
         );
+    }
+
+    /**
+     * Get the UI engine.
+     */
+    public function uiEngine(): ?UiEngine
+    {
+        return $this->uiEngine;
     }
 }

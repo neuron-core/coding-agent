@@ -13,10 +13,10 @@ use function usort;
 /**
  * Registry for inline commands that extensions can register.
  */
-final class CommandRegistry
+class CommandRegistry
 {
     /** @var array<string, InlineCommand> */
-    private array $commands = [];
+    protected array $commands = [];
 
     /**
      * Register an inline command.

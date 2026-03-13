@@ -13,10 +13,10 @@ use function sprintf;
 /**
  * Registry for AI tools that extensions can register.
  */
-final class ToolRegistry
+class ToolRegistry
 {
     /** @var array<string, ToolInterface> */
-    private array $tools = [];
+    protected array $tools = [];
 
     /**
      * Register a tool.
