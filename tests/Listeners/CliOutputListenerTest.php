@@ -23,7 +23,6 @@ class CliOutputListenerTest extends TestCase
     private function createListener(UiEngine $uiEngine, ?BufferedOutput $output = null): CliOutputListener
     {
         $settings = $this->createMock(SettingsInterface::class);
-        $settings->method('getAllowedTools')->willReturn([]);
 
         return new CliOutputListener(
             $this->createMock(InputInterface::class),

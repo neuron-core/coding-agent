@@ -26,7 +26,6 @@ use function str_repeat;
 class CliOutputListener
 {
     protected array $sessionAllowedActions = [];
-    protected array $alwaysAllowedActions;
     protected ?SpinnerProgress $spinner = null;
 
     public function __construct(
@@ -36,7 +35,6 @@ class CliOutputListener
         protected readonly RendererRegistry $renderers,
         protected readonly UiEngine $uiEngine,
     ) {
-        $this->alwaysAllowedActions = $settings->getAllowedTools();
     }
 
     public function onThinking(AgentThinkingEvent $event): void
@@ -62,8 +60,7 @@ class CliOutputListener
             );
             $this->renderCycle();
 
-            if (in_array($action->name, $this->alwaysAllowedActions, true) ||
-                in_array($action->name, $this->sessionAllowedActions, true)) {
+            if (in_array($action->name, $this->sessionAllowedActions, true)) {
                 $action->approve();
                 continue;
             }
@@ -83,12 +80,11 @@ class CliOutputListener
 
     protected function askDecision(): string
     {
-        $values = ['allow', 'session', 'always', 'reject'];
+        $values = ['allow', 'session', 'reject'];
 
         $index = (new SelectMenuHelper($this->output))->ask("Options: ", [
             'Allow once',
             'Allow for session',
-            'Always allow',
             'Reject',
         ]);
 
@@ -97,18 +93,11 @@ class CliOutputListener
 
     protected function processDecision(Action $action, string $decision): void
     {
-        if (in_array($decision, ['allow', 'session', 'always'], true)) {
+        if (in_array($decision, ['allow', 'session'], true)) {
             $action->approve();
 
             if ($decision === 'session') {
                 $this->sessionAllowedActions[] = $action->name;
-            } elseif ($decision === 'always') {
-                $this->alwaysAllowedActions[] = $action->name;
-                $this->sessionAllowedActions[] = $action->name;
-                $this->settings->addAllowedTool($action->name);
-                $this->output->writeln(
-                    Text::content("Tool '{$action->name}' is now always allowed.")->cyan()->build()
-                );
             }
         } else {
             $feedback = $this->askFeedback();

@@ -54,29 +54,6 @@ interface SettingsInterface
     public function getSettingsPath(): string;
 
     /**
-     * Get the list of tools that are always allowed (no approval required).
-     *
-     * @return string[]
-     */
-    public function getAllowedTools(): array;
-
-    /**
-     * Add a tool to the always allowed list.
-     *
-     * @param string $toolName The tool name to add
-     * @return bool True if added, false if already exists
-     */
-    public function addAllowedTool(string $toolName): bool;
-
-    /**
-     * Remove a tool from the always allowed list.
-     *
-     * @param string $toolName The tool name to remove
-     * @return bool True if removed, false if not found
-     */
-    public function removeAllowedTool(string $toolName): bool;
-
-    /**
      * Get the path to the context file containing project-specific instructions.
      *
      * Checks for the 'context_file' option in settings, falls back to 'Agents.md'.

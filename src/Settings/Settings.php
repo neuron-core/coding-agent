@@ -17,10 +17,7 @@ use function is_array;
 use function json_decode;
 use function sprintf;
 use function str_contains;
-use function array_search;
-use function array_values;
 use function file_put_contents;
-use function in_array;
 use function json_encode;
 use function dirname;
 
@@ -168,61 +165,6 @@ class Settings implements SettingsInterface
     {
         $this->providerFactory = $factory;
         return $this;
-    }
-
-    /**
-     * Get the list of tools that are always allowed (no approval required).
-     *
-     * @return string[]
-     */
-    public function getAllowedTools(): array
-    {
-        return $this->settings['allowed_tools'] ?? [];
-    }
-
-    /**
-     * Add a tool to the always allowed list.
-     *
-     * @param string $toolName The tool name to add
-     * @return bool True if added, false if already exists
-     */
-    public function addAllowedTool(string $toolName): bool
-    {
-        if (!isset($this->settings['allowed_tools'])) {
-            $this->settings['allowed_tools'] = [];
-        }
-
-        if (in_array($toolName, $this->settings['allowed_tools'], true)) {
-            return false;
-        }
-
-        $this->settings['allowed_tools'][] = $toolName;
-        $this->save();
-        return true;
-    }
-
-    /**
-     * Remove a tool from the always allowed list.
-     *
-     * @param string $toolName The tool name to remove
-     * @return bool True if removed, false if not found
-     */
-    public function removeAllowedTool(string $toolName): bool
-    {
-        if (!isset($this->settings['allowed_tools'])) {
-            return false;
-        }
-
-        $key = array_search($toolName, $this->settings['allowed_tools'], true);
-        if ($key === false) {
-            return false;
-        }
-
-        unset($this->settings['allowed_tools'][$key]);
-        // Re-index the array
-        $this->settings['allowed_tools'] = array_values($this->settings['allowed_tools']);
-        $this->save();
-        return true;
     }
 
     /**
