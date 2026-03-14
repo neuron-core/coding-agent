@@ -26,7 +26,7 @@ class CodingExtension implements ExtensionInterface
     public function register(ExtensionApi $api): void
     {
         // Register the coding.md memory file
-        $codingMemoryPath = realpath(dirname(__DIR__, 4) . '/.maestro/memories/coding.md');
+        $codingMemoryPath = realpath(__DIR__.'/memories/coding.md');
 
         if ($codingMemoryPath !== false) {
             $api->registerMemory('coding', $codingMemoryPath);
