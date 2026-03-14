@@ -18,7 +18,7 @@ While most AI coding agents are written in Python or TypeScript, Maestro demonst
 - **Multi-Provider AI Support**: Choose from Anthropic Claude, OpenAI, Gemini, Cohere, Mistral, Ollama, Grok, or Deepseek
 - **MCP Integration**: Extend capabilities with Model Context Protocol servers
 - **Sophisticated Output Rendering**: Beautiful diffs, colored syntax highlighting, and intuitive tool call visualization
-- **Event-Driven Design**: A clean PSR-14 event system and an inline command registry make the tool easier to extend
+- **Customizable with Extensions**: Powerful extension system that allows you to customize the agent by adding custom tools, inline commands, and more
 
 ## Full Introduction
 
@@ -88,34 +88,6 @@ It will start an interactive setup wizard that guides you through the configurat
 }
 ```
 
-#### OpenAI
-
-```json
-{
-    "default": "openai",
-    "providers": {
-        "openai": {
-            "api_key": "sk-your-openai-key-here",
-            "model": "gpt-4"
-        }
-    }
-}
-```
-
-#### Gemini
-
-```json
-{
-    "default": "gemini",
-    "providers": {
-        "gemini": {
-            "api_key": "your-gemini-api-key",
-            "model": "gemini-3-pro-preview"
-        }
-    }
-}
-```
-
 #### Ollama
 
 ```json
@@ -130,16 +102,7 @@ It will start an interactive setup wizard that guides you through the configurat
 }
 ```
 
-#### Other Providers
-
-Additional supported providers with similar configuration:
-
-| Provider | Type |
-|---|---|
-| **Cohere** | `"cohere"` |
-| **Mistral** | `"mistral"` |
-| **Grok (xAI)** | `"xai"` or `"grok"` |
-| **Deepseek** | `"deepseek"` |
+For all supported providers you can check out the Neuron AI documentation: https://docs.neuron-ai.dev/providers/ai-provider
 
 ### Context File Configuration
 
@@ -156,7 +119,7 @@ If no `context_file` is specified, the agent will look for `Agents.md` in the pr
 }
 ```
 
-### MCP Server Configuration
+### MCP Servers
 
 Add Model Context Protocol servers to extend the agent's capabilities:
 
@@ -168,16 +131,6 @@ Add Model Context Protocol servers to extend the agent's capabilities:
     "mcp_servers": {
         "tavily": {
             "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=<your-api-key>"
-        },
-        "github": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@modelcontextprotocol/server-github"
-            ],
-            "env": {
-                "GITHUB_PERSONAL_ACCESS_TOKEN": "your-github-token"
-            }
         }
     }
 }
@@ -249,13 +202,15 @@ class MyExtension implements ExtensionInterface
 
 For a comprehensive guide on building extensions, including auto-discovery, UI customization, packaging, and all available APIs, see the **[Extension README](src/Extension/README.md)**.
 
+This repository also includes the [skills](./skills) directory to provide detailed instructions to AI coding assistants for extension development.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the FSL License - see the [LICENSE](LICENSE) file for details.
 
 ## Credits
 
