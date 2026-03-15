@@ -118,7 +118,7 @@ class FileChangeRenderer implements ToolRenderer
                 $colored[] = Text::content(substr($line, 0, 1) . '    ' . substr($line, 1))->green()->bold()->build();
             } elseif (str_starts_with($line, ' ')) {
                 // Context - gray
-                $colored[] = Text::content($line)->gray()->build();
+                $colored[] = Text::content('    '.$line)->gray()->build();
             } elseif (str_starts_with($line, '\ No newline')) {
                 // Skip diff metadata lines
                 continue;
