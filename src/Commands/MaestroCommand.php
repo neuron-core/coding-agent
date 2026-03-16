@@ -9,6 +9,7 @@ use NeuronCore\Maestro\Agent\MaestroAgent;
 use NeuronCore\Maestro\Console\Inline\DiscoverInlineCommand;
 use NeuronCore\Maestro\Console\Inline\HelpInlineCommand;
 use NeuronCore\Maestro\Console\Inline\InitInlineCommand;
+use NeuronCore\Maestro\Console\RichInput;
 use NeuronCore\Maestro\Console\Text;
 use NeuronCore\Maestro\EventBus\EventDispatcher;
 use NeuronCore\Maestro\Events\AgentResponseEvent;
@@ -28,16 +29,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
-use function fgets;
-use function function_exists;
 use function in_array;
 use function preg_split;
-use function readline;
 use function str_starts_with;
 use function substr;
 use function trim;
-
-use const STDIN;
 
 #[AsCommand(
     name: 'maestro',
@@ -46,6 +42,7 @@ use const STDIN;
 class MaestroCommand extends Command
 {
     protected ExtensionLoader $loader;
+    protected RichInput $inputReader;
 
     /**
      * @throws Throwable
@@ -79,6 +76,7 @@ class MaestroCommand extends Command
             return Command::FAILURE;
         }
 
+        $this->inputReader = new RichInput();
         $this->loader = ExtensionLoader::create(new GenericRenderer(), $settings);
 
         // Register core extensions first so user extensions can override them
@@ -153,6 +151,7 @@ class MaestroCommand extends Command
             try {
                 $orchestrator->chat($userInput);
             } catch (Exception $e) {
+
                 $output->writeln(Text::content('Error: ' . $e->getMessage())->red()->build()."\n");
             }
         }
@@ -163,12 +162,7 @@ class MaestroCommand extends Command
 
     protected function readInput(string $prompt): string
     {
-        if (function_exists('readline')) {
-            return (string) readline($prompt);
-        }
-
-        echo $prompt;
-        return (string) fgets(STDIN);
+        return $this->inputReader->read($prompt);
     }
 
     protected function readInlineCommand(string $input): array
