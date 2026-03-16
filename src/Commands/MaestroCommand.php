@@ -14,7 +14,6 @@ use NeuronCore\Maestro\EventBus\EventDispatcher;
 use NeuronCore\Maestro\Events\AgentResponseEvent;
 use NeuronCore\Maestro\Events\AgentThinkingEvent;
 use NeuronCore\Maestro\Events\ToolApprovalRequestedEvent;
-use NeuronCore\Maestro\Extension\Coding\CodingExtension;
 use NeuronCore\Maestro\Extension\Core\CoreExtension;
 use NeuronCore\Maestro\Extension\ExtensionLoader;
 use NeuronCore\Maestro\Extension\Registry\CommandRegistry;
@@ -85,12 +84,11 @@ class MaestroCommand extends Command
         // Register core extensions first so user extensions can override them
         $this->loader->registerCore(
             new CoreExtension(),
-            new CodingExtension(),
         );
 
         // Load user extensions from settings
         try {
-            $this->loader->load($settings->all());
+            $this->loader->load($settings);
         } catch (Exception $e) {
             $output->writeln(Text::content('Failed to load extensions: ' . $e->getMessage())->red()->build());
             $output->writeln('');

@@ -69,13 +69,12 @@ class ExtensionLoader
      * Settings can override manifest extension enabled status and config using
      * the class name as the key.
      *
-     * @param array{extensions?: array<int, array{class: string, enabled?: bool, config?: array<string, mixed>}>|array<string, array{enabled?: bool, config?: array<string, mixed>}>} $settings
      * @return array<ExtensionDescriptor>
      */
-    public function load(array $settings): array
+    public function load(Settings $settings): array
     {
         $manifest = $this->loadManifest();
-        $settingsExtensions = $settings['extensions'] ?? [];
+        $settingsExtensions = $settings->getExtensions();
 
         $extensions = $this->mergeExtensions($manifest, $settingsExtensions);
 

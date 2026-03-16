@@ -61,7 +61,11 @@ class ExtensionLoaderTest extends TestCase
     {
         $loader = $this->createLoader();
 
-        $result = $loader->load([]);
+        $this->settings->expects($this->once())
+            ->method('getExtensions')
+            ->willReturn([]);
+
+        $result = $loader->load($this->settings);
 
         $this->assertSame([], $result);
     }
@@ -70,11 +74,13 @@ class ExtensionLoaderTest extends TestCase
     {
         $loader = $this->createLoader();
 
-        $result = $loader->load([
-            'extensions' => [
+        $this->settings->expects($this->once())
+            ->method('getExtensions')
+            ->willReturn([
                 ['class' => 'NonExistent\\Class'],
-            ],
-        ]);
+            ]);
+
+        $result = $loader->load($this->settings);
 
         $this->assertSame([], $result);
     }
@@ -83,14 +89,16 @@ class ExtensionLoaderTest extends TestCase
     {
         $loader = $this->createLoader();
 
-        $result = $loader->load([
-            'extensions' => [
+        $this->settings->expects($this->once())
+            ->method('getExtensions')
+            ->willReturn([
                 [
                     'class' => TestExtension::class,
                     'enabled' => false,
                 ],
-            ],
-        ]);
+            ]);
+
+        $result = $loader->load($this->settings);
 
         $this->assertCount(1, $result);
         $this->assertFalse($this->commands->has('test_command'));
@@ -100,14 +108,16 @@ class ExtensionLoaderTest extends TestCase
     {
         $loader = $this->createLoader();
 
-        $result = $loader->load([
-            'extensions' => [
+        $this->settings->expects($this->once())
+            ->method('getExtensions')
+            ->willReturn([
                 [
                     'class' => TestExtension::class,
                     'enabled' => true,
                 ],
-            ],
-        ]);
+            ]);
+
+        $result = $loader->load($this->settings);
 
         $this->assertCount(1, $result);
         $this->assertTrue($this->commands->has('test_command'));
@@ -117,14 +127,16 @@ class ExtensionLoaderTest extends TestCase
     {
         $loader = $this->createLoader();
 
-        $result = $loader->load([
-            'extensions' => [
+        $this->settings->expects($this->once())
+            ->method('getExtensions')
+            ->willReturn([
                 [
                     'class' => TestExtension::class,
                     'config' => ['key' => 'value'],
                 ],
-            ],
-        ]);
+            ]);
+
+        $result = $loader->load($this->settings);
 
         $this->assertCount(1, $result);
         $this->assertSame(['key' => 'value'], $result[0]->config);
@@ -142,14 +154,16 @@ class ExtensionLoaderTest extends TestCase
 
         $loader = $this->createLoader();
 
-        $loader->load([
-            'extensions' => [
+        $this->settings->expects($this->once())
+            ->method('getExtensions')
+            ->willReturn([
                 [
                     'class' => InvalidExtension::class,
                     'enabled' => true,
                 ],
-            ],
-        ]);
+            ]);
+
+        $loader->load($this->settings);
     }
 
     public function testCreateReturnsLoaderInstance(): void
@@ -190,11 +204,13 @@ class ExtensionLoaderTest extends TestCase
     {
         $loader = $this->createLoader();
 
-        $loader->load([
-            'extensions' => [
+        $this->settings->expects($this->once())
+            ->method('getExtensions')
+            ->willReturn([
                 ['class' => TestExtension::class],
-            ],
-        ]);
+            ]);
+
+        $loader->load($this->settings);
 
         $descriptors = $loader->descriptors();
 
