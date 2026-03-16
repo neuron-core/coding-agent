@@ -220,17 +220,16 @@ class RichInput
     {
         // Clear the entire line and move to start
         fwrite(STDOUT, "\r\033[K");
-        fflush(STDOUT);
 
         // Write prompt and buffer
         fwrite(STDOUT, $prompt . $buffer);
-        fflush(STDOUT);
 
-        // Move cursor to correct position using absolute positioning
-        $totalLength = strlen($prompt) + $cursorPos;
-        // Use escape sequence to move cursor to column N (1-indexed)
-        fwrite(STDOUT, "\033[{$totalLength}G");
-        fflush(STDOUT);
+        // Move cursor to correct position
+        if ($cursorPos < strlen($buffer)) {
+            // Move cursor backward
+            $diff = strlen($buffer) - $cursorPos;
+            fwrite(STDOUT, "\033[{$diff}D");
+        }
     }
 
     /**

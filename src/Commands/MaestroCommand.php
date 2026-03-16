@@ -29,8 +29,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
+use function function_exists;
 use function in_array;
 use function preg_split;
+use function readline;
 use function str_starts_with;
 use function substr;
 use function trim;
@@ -162,6 +164,12 @@ class MaestroCommand extends Command
 
     protected function readInput(string $prompt): string
     {
+        // Use native readline() if available - it provides rich line editing with cursor navigation
+        if (function_exists('readline')) {
+            return (string) readline($prompt);
+        }
+
+        // Fall back to custom implementation
         return $this->inputReader->read($prompt);
     }
 
