@@ -8,6 +8,7 @@ use Exception;
 use Throwable;
 
 use function exec;
+use function fflush;
 use function fread;
 use function fwrite;
 use function function_exists;
@@ -223,13 +224,14 @@ class RichInput
         fwrite(STDOUT, $prompt . $buffer);
 
         // Move cursor to correct position
-        $promptLength = strlen($prompt);
-
         if ($cursorPos < strlen($buffer)) {
             // Move cursor backward
             $diff = strlen($buffer) - $cursorPos;
             fwrite(STDOUT, "\033[{$diff}D");
         }
+
+        // Flush output to ensure cursor moves immediately
+        fflush(STDOUT);
     }
 
     /**
