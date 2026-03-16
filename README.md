@@ -183,11 +183,48 @@ To enable agent monitoring you just need to add the `inspector_key` field to you
 
 You can get an `INSPECTOR_INGESTION_KEY` from the [Inspector dashboard](https://app.inspector.dev/register).
 
-## Creating Extensions
+## Extension Architecture
 
-Maestro supports a powerful extension system that allows you to customize the agent by adding custom tools, inline commands, renderers, event handlers, memory files, and UI customizations.
+Maestro's extension system is the primary customization layer. Extensions are PHP classes that implement `ExtensionInterface` and register components through a single `ExtensionApi` object injected at boot time.
 
-Create an extension class that implements `ExtensionInterface`:
+### How it works
+
+At startup, the `ExtensionLoader` builds a set of shared registries (tools, commands, renderers, events, memories, UI) and wires them into an `ExtensionApi` instance. Each extension's `register()` method is called with that API, allowing it to push into any registry. The agent then reads from those registries for the rest of the session.
+
+```
+composer.json (extra.maestro)
+        │
+        ▼
+  .maestro/manifest.php  ──►  ExtensionLoader
+  .maestro/settings.json ──►  (merges manifest + settings)
+                                       │
+                                       ▼
+                              ExtensionApi (per extension)
+                         ┌─────────────┴─────────────┐
+                    register()                   register()
+                         │                            │
+              ┌──────────▼──────────────────────────┐
+              │  ToolRegistry  CommandRegistry        │
+              │  RendererRegistry  EventRegistry      │
+              │  MemoryRegistry  UiEngine             │
+              └──────────────────────────────────────┘
+                         │
+                         ▼
+                   MaestroAgent (reads registries at runtime)
+```
+
+### Extension components
+
+| Component | API method | Purpose |
+|---|---|---|
+| AI Tools | `registerTool()` | New capabilities the agent can invoke (filesystem, HTTP, etc.) |
+| Inline Commands | `registerCommand()` | `/slash` commands available in the interactive console |
+| Renderers | `registerRenderer()` | Custom terminal output for a specific tool's result |
+| Event Handlers | `on()` | React to agent lifecycle events (thinking, response, tool approval) |
+| Memory Files | `registerMemory()` | Markdown files injected into the agent's system prompt |
+| UI / Widgets | `registerWidget()`, `ui()` | Slots, themes, and widgets for terminal interface customization |
+
+### Minimal extension
 
 ```php
 class MyExtension implements ExtensionInterface
@@ -199,7 +236,6 @@ class MyExtension implements ExtensionInterface
 
     public function register(ExtensionApi $api): void
     {
-        // Register tools, commands, renderers, events, etc.
         $api->registerTool($myTool);
         $api->registerCommand($myCommand);
         $api->registerRenderer('my_tool', $myRenderer);
@@ -207,7 +243,16 @@ class MyExtension implements ExtensionInterface
 }
 ```
 
-For a comprehensive guide on building extensions, including auto-discovery, UI customization, packaging, and all available APIs, see the **[Extension README](src/Extension/README.md)**.
+### Discovery and loading
+
+Extensions can be loaded two ways:
+
+- **Auto-discovery** — declare them in your package's `composer.json` under `extra.maestro.extensions`. Maestro generates a manifest at `.maestro/manifest.php` via `maestro discover` (or `composer dump-autoload`).
+- **Manual registration** — list them directly in `.maestro/settings.json` under the `extensions` key.
+
+Settings always take precedence over the manifest, allowing users to override `enabled` status and pass configuration to any extension.
+
+For a comprehensive guide covering packaging, auto-discovery, UI customization, and all available APIs, see the **[Extension README](src/Extension/README.md)**.
 
 This repository also includes the [skills](./skills) directory to provide detailed instructions to AI coding assistants for extension development.
 
