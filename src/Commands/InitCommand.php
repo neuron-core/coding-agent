@@ -6,6 +6,7 @@ namespace NeuronCore\Maestro\Commands;
 
 use NeuronCore\Maestro\Console\Text;
 use NeuronCore\Maestro\Console\SelectMenuHelper;
+use NeuronCore\Maestro\Extension\Coding\CodingExtension;
 use NeuronCore\Maestro\Settings\ProviderFactory;
 use NeuronCore\Maestro\Settings\Settings;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -35,13 +36,14 @@ class InitCommand extends Command
     private const PROVIDER_NAMES = [
         'anthropic' => 'Anthropic (Claude)',
         'openai' => 'OpenAI',
+        'openailike' => 'OpenAI-Compatible',
         'gemini' => 'Google Gemini',
         'cohere' => 'Cohere',
         'mistral' => 'Mistral AI',
         'ollama' => 'Ollama (Local)',
         'xai' => 'xAI (Grok)',
         'deepseek' => 'Deepseek',
-        'openailike' => 'OpenAI-Compatible',
+        'zai' => 'ZAI (GLM models)',
     ];
 
     private const DEFAULT_MODELS = [
@@ -54,10 +56,11 @@ class InitCommand extends Command
         'xai' => 'grok-4',
         'deepseek' => 'deepseek-chat',
         'openailike' => 'gpt-5',
+        'zai' => 'glm-4.7'
     ];
 
     private const PROVIDERS_REQUIRING_API_KEY = [
-        'anthropic', 'openai', 'gemini', 'cohere', 'mistral', 'xai', 'deepseek',
+        'anthropic', 'openai', 'gemini', 'cohere', 'mistral', 'xai', 'deepseek', 'zai',
     ];
 
     private const PROVIDERS_REQUIRING_BASE_URL = [
@@ -168,7 +171,7 @@ class InitCommand extends Command
         // Add default extensions configuration
         $config['extensions'] = [
             [
-                'class' => \NeuronCore\Maestro\Extension\Coding\CodingExtension::class,
+                'class' => CodingExtension::class,
                 'enabled' => true,
             ],
         ];
@@ -187,8 +190,6 @@ class InitCommand extends Command
 
         $output->writeln(Text::content('Configuration saved successfully!')->green()->build());
         $output->writeln(Text::content('Settings file: ' . $settings->getSettingsPath())->cyan()->build());
-        $output->writeln('');
-        $output->writeln(Text::content('You can now run: ')->cyan()->build() . "maestro");
         $output->writeln('');
 
         return Command::SUCCESS;

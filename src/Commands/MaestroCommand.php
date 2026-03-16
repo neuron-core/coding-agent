@@ -58,7 +58,7 @@ class MaestroCommand extends Command
         // Auto-run init if settings don't exist
         if (!$settings->fileExists()) {
             $output->writeln('');
-            $output->writeln(Text::content('Welcome to Maestro! Setting up your configuration...')->cyan()->build());
+            $output->writeln(Text::content('Welcome to Maestro settings configuration')->cyan()->build());
             $output->writeln('');
 
             $initCommand = new InitInlineCommand();
@@ -67,17 +67,15 @@ class MaestroCommand extends Command
             // Reload settings after init
             $settings = new Settings();
 
-            // If init still didn't create valid settings, exit
+            // If init still didn't create valid settings, restart the wizard
             if (!$settings->fileExists()) {
-                $output->writeln(Text::content('Setup cancelled. Run "maestro init" to configure Maestro.')->yellow()->build());
-                $output->writeln('');
-                return Command::FAILURE;
+                $output->writeln(Text::content('Failed to initialize settings. Restarting wizard...')->red()->build());
+                $this->execute($input, $output);
             }
         }
 
         if (!$settings->hasValidProvider()) {
-            $output->writeln(Text::content('Warning: Settings file is missing valid provider configuration.')->red()->build());
-            $output->writeln(Text::content("The 'provider.type' setting is required.")->red()->build());
+            $output->writeln(Text::content('Warning: Settings file is missing a valid provider configuration.')->red()->build());
             $output->writeln('');
             return Command::FAILURE;
         }

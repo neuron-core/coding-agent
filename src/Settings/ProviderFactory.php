@@ -14,6 +14,7 @@ use NeuronAI\Providers\Mistral\Mistral;
 use NeuronAI\Providers\Ollama\Ollama;
 use NeuronAI\Providers\XAI\Grok;
 use NeuronAI\Providers\Deepseek\Deepseek;
+use NeuronAI\Providers\ZAI\ZAI;
 use RuntimeException;
 
 use function array_keys;
@@ -91,6 +92,7 @@ class ProviderFactory implements ProviderFactoryInterface
         $this->factories['ollama'] = fn (array $settings): AIProviderInterface => $this->createOllama($settings);
         $this->factories['xai'] = $this->factories['grok'] = fn (array $settings): AIProviderInterface => $this->createGrok($settings);
         $this->factories['deepseek'] = fn (array $settings): AIProviderInterface => $this->createDeepseek($settings);
+        $this->factories['zai'] = fn (array $settings): AIProviderInterface => $this->createZai($settings);
     }
 
     private function createAnthropic(array $settings): Anthropic
@@ -257,6 +259,19 @@ class ProviderFactory implements ProviderFactoryInterface
             key: $apiKey,
             model: $settings['model'] ?? 'deepseek-chat',
             parameters: $parameters,
+        );
+    }
+
+    protected function createZai(array $settings): ZAI
+    {
+        $apiKey = $settings['api_key']
+            ?? throw new RuntimeException(
+                'Deepseek API key is not configured. Add "api_key" to provider object in .maestro/settings.json.'
+            );
+
+        return new ZAI(
+            key: $apiKey,
+            model: $settings['model'] ?? 'glm-4.7',
         );
     }
 }
