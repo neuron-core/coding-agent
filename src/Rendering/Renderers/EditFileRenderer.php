@@ -84,13 +84,13 @@ class EditFileRenderer implements ToolRenderer
             }
             if (str_starts_with($line, '-')) {
                 // Deletions - red
-                $colored[] = Text::content($line)->red()->build();
+                $colored[] = Text::content(substr($line, 0, 1) . '    ' . substr($line, 1))->red()->build();
             } elseif (str_starts_with($line, '+')) {
                 // Additions - green
-                $colored[] = Text::content($line)->green()->build();
+                $colored[] = Text::content(substr($line, 0, 1) . '    ' . substr($line, 1))->green()->build();
             } elseif (str_starts_with($line, ' ')) {
                 // Context - gray
-                $colored[] = Text::content($line)->gray()->build();
+                $colored[] = Text::content('    '.$line)->gray()->build();
             } elseif (str_starts_with($line, '\ No newline')) {
                 // Skip diff metadata lines
                 continue;
