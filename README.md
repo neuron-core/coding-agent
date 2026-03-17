@@ -1,7 +1,7 @@
-# Maestro - The First PHP-Based AI Coding Agent
+# Maestro - The First PHP-Based AI CLI Agent
 
-**Maestro** is the first coding agent built entirely in PHP with the [Neuron AI framework](https://docs.neuron-ai.dev).
-It brings powerful AI-assisted development to the PHP ecosystem through an elegant CLI tool that combines intelligent code analysis
+**Maestro** is the first CLI agent built entirely in PHP with the [Neuron AI framework](https://docs.neuron-ai.dev).
+It brings powerful agentic capabilities to the PHP ecosystem through an elegant CLI tool that combines intelligent analysis
 with interactive tool approval.
 
 ![PHP](https://img.shields.io/badge/PHP-8.1%2B-blue)
@@ -17,7 +17,7 @@ with interactive tool approval.
 
 ## About Maestro
 
-While most AI coding agents are written in Python or TypeScript, Maestro demonstrates that PHP can deliver a world-class AI coding experience. Built on the modern [Neuron AI framework](https://docs.neuron-ai.dev), Maestro provides:
+While most CLI agents are written in Python or TypeScript, Maestro demonstrates that PHP can deliver a world-class AI experience. Built on the modern [Neuron AI framework](https://docs.neuron-ai.dev), Maestro provides:
 
 - **Native PHP Architecture**: Every component—agent orchestration, CLI interface, event system—is implemented in PHP
 - **Tool Approval System**: Interactive confirmation before the agent executes filesystem operations
