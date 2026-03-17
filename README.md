@@ -22,7 +22,7 @@ While most CLI agents are written in Python or TypeScript, Maestro demonstrates 
 - **Tool Approval System**: Interactive confirmation before the agent executes sensitive operations
 - **Multi-Provider AI Support**: Choose from Anthropic Claude, OpenAI, Gemini, Cohere, Mistral, Ollama, Grok, or Deepseek
 - **MCP Integration**: Extend capabilities with Model Context Protocol servers
-- **Sophisticated Output Rendering**: Beautiful diffs, colored syntax highlighting, and intuitive tool call visualization
+- **Sophisticated Output Rendering**: Beautiful diffs, markdown rendering, and intuitive tool call visualization
 - **Customizable with Extensions**: Powerful extension system that allows you to customize the agent by adding custom tools, inline commands, and more
 
 ## Full Introduction
