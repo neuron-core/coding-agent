@@ -19,7 +19,7 @@ with interactive tool approval.
 While most CLI agents are written in Python or TypeScript, Maestro demonstrates that PHP can deliver a world-class AI experience. Built on the modern [Neuron AI framework](https://docs.neuron-ai.dev), Maestro provides:
 
 - **Native PHP Architecture**: Every component—agent orchestration, CLI interface, event system—is implemented in PHP
-- **Tool Approval System**: Interactive confirmation before the agent executes filesystem operations
+- **Tool Approval System**: Interactive confirmation before the agent executes sensitive operations
 - **Multi-Provider AI Support**: Choose from Anthropic Claude, OpenAI, Gemini, Cohere, Mistral, Ollama, Grok, or Deepseek
 - **MCP Integration**: Extend capabilities with Model Context Protocol servers
 - **Sophisticated Output Rendering**: Beautiful diffs, colored syntax highlighting, and intuitive tool call visualization
