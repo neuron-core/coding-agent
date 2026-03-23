@@ -53,12 +53,12 @@ class UiBuilderTest extends TestCase
         $slots = new SlotRegistry();
         $builder = new UiBuilder($this->createTheme(), $slots, new WidgetRegistry());
 
-        $builder->addToSlot(SlotType::STATUS_BAR, 'Status');
-        $slot = $slots->slot(SlotType::STATUS_BAR);
+        $builder->addToSlot(SlotType::HEADER, 'Header');
+        $slot = $slots->slot(SlotType::HEADER);
 
         $this->assertFalse($slot->isEmpty());
 
-        $builder->clearSlot(SlotType::STATUS_BAR);
+        $builder->clearSlot(SlotType::HEADER);
 
         $this->assertTrue($slot->isEmpty());
     }

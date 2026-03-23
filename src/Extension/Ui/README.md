@@ -6,17 +6,13 @@ The UI system gives extensions full control over what appears in the terminal: l
 
 ## Layout: Slots
 
-A **slot** is a named region of the terminal output. Maestro renders four slots in order on every relevant output cycle:
+A **slot** is a named region of the terminal output. Maestro renders two slots in order on every relevant output cycle:
 
 ```
 ┌──────────────────────────────────┐
 │  header                          │  ← printed once, followed by a blank line
 ├──────────────────────────────────┤
 │  content                         │  ← main response / tool output area
-├──────────────────────────────────┤
-│  status_bar                      │  ← printed inline (no trailing newline)
-├──────────────────────────────────┤
-│  footer                          │  ← preceded by a blank line, printed last
 └──────────────────────────────────┘
 ```
 
@@ -24,8 +20,6 @@ A **slot** is a named region of the terminal output. Maestro renders four slots 
 |------|---------------|-------------|
 | `header` | Before content, only when non-empty | Followed by a blank line |
 | `content` | Every line written as its own `writeln` call | Normal newline per item |
-| `status_bar` | After content, only when non-empty | No trailing newline (`write`, not `writeln`) |
-| `footer` | After status bar, only when non-empty | Preceded by a blank line |
 
 ### Adding content to a slot
 
@@ -52,20 +46,6 @@ $api->ui()->addToSlot(SlotType::HEADER, 'Version: 1.0', priority: 100);
 
 Use a high priority (e.g. `900`) to appear at the top of a slot and a low priority (e.g. `100`) to appear near the bottom.
 
-### Status bar: appending, not replacing
-
-The `status_bar` slot is designed to be composed by multiple extensions. Each item added with `addToSlot` is appended to the others. Because the slot renders without a trailing newline, all items appear on the same line:
-
-```php
-// Extension A
-$api->ui()->addToSlot(SlotType::STATUS_BAR, ' ⎇ main ', priority: 700);
-
-// Extension B
-$api->ui()->addToSlot(SlotType::STATUS_BAR, ' ✓ 3 tests ', priority: 600);
-
-// Rendered → " ⎇ main  ✓ 3 tests "
-```
-
 ### Clearing a slot
 
 ```php
@@ -82,11 +62,9 @@ Use the `SlotType` enum to avoid typos:
 use NeuronCore\Maestro\Extension\Ui\SlotType;
 
 $api->ui()->addToSlot(SlotType::HEADER,'My Header');
-$api->ui()->addToSlot(SlotType::STATUS_BAR,' info ');
-$api->ui()->addToSlot(SlotType::FOOTER,'Tip: type /help');
 ```
 
-You can also register content into custom slot names if you coordinate with other extensions, though only the four built-in slots are rendered by the default `UiEngine`.
+You can also register content into custom slot names if you coordinate with other extensions, though only the two built-in slots are rendered by the default `UiEngine`.
 
 ---
 

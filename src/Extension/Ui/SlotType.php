@@ -10,7 +10,5 @@ namespace NeuronCore\Maestro\Extension\Ui;
 enum SlotType: string
 {
     case HEADER = 'header';
-    case STATUS_BAR = 'status_bar';
     case CONTENT = 'content';
-    case FOOTER = 'footer';
 }

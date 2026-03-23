@@ -36,15 +36,15 @@ class SlotRegistryTest extends TestCase
     {
         $registry = new SlotRegistry();
         $registry->slot(SlotType::HEADER)->add('Header item');
-        $registry->slot(SlotType::FOOTER)->add('Footer item');
+        $registry->slot(SlotType::CONTENT)->add('Content item');
 
         $this->assertFalse($registry->slot(SlotType::HEADER)->isEmpty());
-        $this->assertFalse($registry->slot(SlotType::FOOTER)->isEmpty());
+        $this->assertFalse($registry->slot(SlotType::CONTENT)->isEmpty());
 
         $registry->clearAll();
 
         $this->assertTrue($registry->slot(SlotType::HEADER)->isEmpty());
-        $this->assertTrue($registry->slot(SlotType::FOOTER)->isEmpty());
+        $this->assertTrue($registry->slot(SlotType::CONTENT)->isEmpty());
     }
 
     public function testNamesReturnsAllSlotNames(): void
@@ -52,10 +52,9 @@ class SlotRegistryTest extends TestCase
         $registry = new SlotRegistry();
         $registry->slot(SlotType::HEADER);
         $registry->slot(SlotType::CONTENT);
-        $registry->slot(SlotType::FOOTER);
 
         $this->assertSame(
-            [SlotType::HEADER->value, SlotType::CONTENT->value, SlotType::FOOTER->value],
+            [SlotType::HEADER->value, SlotType::CONTENT->value],
             $registry->names(),
         );
     }
@@ -64,12 +63,12 @@ class SlotRegistryTest extends TestCase
     {
         $registry = new SlotRegistry();
         $header = $registry->slot(SlotType::HEADER);
-        $footer = $registry->slot(SlotType::FOOTER);
+        $content = $registry->slot(SlotType::CONTENT);
 
         $all = $registry->all();
 
         $this->assertCount(2, $all);
         $this->assertSame($header, $all[SlotType::HEADER->value]);
-        $this->assertSame($footer, $all[SlotType::FOOTER->value]);
+        $this->assertSame($content, $all[SlotType::CONTENT->value]);
     }
 }

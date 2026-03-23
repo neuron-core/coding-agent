@@ -6,7 +6,7 @@ namespace NeuronCore\Maestro\Extension\Ui;
 
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function implode;
+use function str_repeat;
 
 /**
  * Main UI engine for rendering CLI output with themes and slots.
@@ -22,9 +22,7 @@ class UiEngine
 
         // Initialize default slots
         $this->slots->slot(SlotType::HEADER);
-        $this->slots->slot(SlotType::STATUS_BAR);
         $this->slots->slot(SlotType::CONTENT);
-        $this->slots->slot(SlotType::FOOTER);
     }
 
     /**
@@ -34,7 +32,6 @@ class UiEngine
     {
         $this->renderHeader($output);
         $this->renderContent($output);
-        $this->renderFooter($output);
     }
 
     /**
@@ -65,33 +62,11 @@ class UiEngine
     }
 
     /**
-     * Render footer slot.
+     * Render a horizontal line separator.
      */
-    public function renderFooter(OutputInterface $output): void
+    public function renderSeparator(OutputInterface $output): void
     {
-        $content = $this->slots->slot(SlotType::FOOTER);
-        if ($content->isEmpty()) {
-            return;
-        }
-
-        $output->writeln('');
-        foreach ($content->sorted() as $item) {
-            $output->writeln($item);
-        }
-    }
-
-    /**
-     * Render status bar (typically inline with content).
-     */
-    public function renderStatus(OutputInterface $output): void
-    {
-        $content = $this->slots->slot(SlotType::STATUS_BAR);
-        if ($content->isEmpty()) {
-            return;
-        }
-
-        // Status bar is rendered inline (no newline)
-        $output->write(implode('', $content->sorted()));
+        $output->writeln(Text::content(str_repeat('─', 60))->muted()->build());
     }
 
     /**

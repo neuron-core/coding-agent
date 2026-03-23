@@ -186,7 +186,9 @@ class Settings implements SettingsInterface
         }
 
         // Make the path relative to the settings directory
-        $fullPath = $this->dirPath() . '/' . $file;
+        $fullPath = getcwd() . '/' . $file;
+
+        echo $fullPath;
 
         return file_exists($fullPath) ? $fullPath : null;
     }

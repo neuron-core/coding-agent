@@ -61,9 +61,7 @@ class UiEngineTest extends TestCase
         $names = $engine->slots()->names();
 
         $this->assertContains(SlotType::HEADER->value, $names);
-        $this->assertContains(SlotType::STATUS_BAR->value, $names);
         $this->assertContains(SlotType::CONTENT->value, $names);
-        $this->assertContains(SlotType::FOOTER->value, $names);
     }
 
     public function testRenderHeaderOutputsSlotContent(): void
@@ -75,17 +73,6 @@ class UiEngineTest extends TestCase
         $engine->renderHeader($output);
 
         $this->assertStringContainsString('My Header', $output->fetch());
-    }
-
-    public function testRenderFooterOutputsSlotContent(): void
-    {
-        $engine = $this->createEngine();
-        $engine->slots()->slot(SlotType::FOOTER)->add('My Footer');
-
-        $output = new BufferedOutput();
-        $engine->renderFooter($output);
-
-        $this->assertStringContainsString('My Footer', $output->fetch());
     }
 
     public function testClearSlotsEmptiesAllSlots(): void

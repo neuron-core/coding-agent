@@ -60,30 +60,6 @@ class CliOutputListenerTest extends TestCase
         $this->assertTrue($engine->slots()->slot(SlotType::CONTENT)->isEmpty());
     }
 
-    public function testOnResponseRendersStatusBarContent(): void
-    {
-        $output = new BufferedOutput();
-        $engine = $this->createEngine();
-        $engine->slots()->slot(SlotType::STATUS_BAR)->add(' branch: main ');
-
-        $listener = $this->createListener($engine, $output);
-        $listener->onResponse(new AgentResponseEvent('content'));
-
-        $this->assertStringContainsString(' branch: main ', $output->fetch());
-    }
-
-    public function testStatusBarIsNotClearedAfterRenderCycle(): void
-    {
-        $engine = $this->createEngine();
-        $engine->slots()->slot(SlotType::STATUS_BAR)->add(' branch: main ');
-
-        $listener = $this->createListener($engine);
-        $listener->onResponse(new AgentResponseEvent('first'));
-        $listener->onResponse(new AgentResponseEvent('second'));
-
-        $this->assertFalse($engine->slots()->slot(SlotType::STATUS_BAR)->isEmpty());
-    }
-
     public function testHeaderSlotIsNotRenderedByRenderCycle(): void
     {
         $output = new BufferedOutput();

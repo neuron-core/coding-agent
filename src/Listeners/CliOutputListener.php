@@ -79,7 +79,6 @@ class CliOutputListener
     {
         $this->uiEngine->renderContent($this->output);
         $this->uiEngine->slots()->clear(SlotType::CONTENT);
-        $this->uiEngine->renderFooter($this->output);
     }
 
     protected function askDecision(): string

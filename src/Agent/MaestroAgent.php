@@ -171,7 +171,7 @@ PROMPT;
         if ($agentFile !== null) {
             $agentInstructions = file_get_contents($agentFile);
             if ($agentInstructions !== false) {
-                $instructions .= "\n\n---\n\n## Project-Specific Guidelines\n\n" . trim($agentInstructions);
+                $instructions .= "\n\n---\n\n# Project-Specific Guidelines\n\n" . trim($agentInstructions);
             }
         }
 
