@@ -79,7 +79,6 @@ class CliOutputListener
     {
         $this->uiEngine->renderContent($this->output);
         $this->uiEngine->slots()->clear(SlotType::CONTENT);
-        $this->uiEngine->renderStatus($this->output);
         $this->uiEngine->renderFooter($this->output);
     }
 
