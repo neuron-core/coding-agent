@@ -124,7 +124,7 @@ class Text implements Stringable
         }
 
         // If no theme is set, fall back to plain text
-        if (self::$theme === null) {
+        if (!self::$theme instanceof \NeuronCore\Maestro\Extension\Ui\ThemeInterface) {
             return $this->text;
         }
 
