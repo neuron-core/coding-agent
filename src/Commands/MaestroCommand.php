@@ -120,6 +120,7 @@ class MaestroCommand extends Command
         $this->loader->uiEngine()->renderHeader($output);
 
         while (true) {
+            $output->writeln('');
             $userInput = trim($this->readInput('> '));
             $output->writeln('');
 
