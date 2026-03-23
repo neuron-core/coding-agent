@@ -16,6 +16,7 @@ use NeuronCore\Maestro\Events\AgentThinkingEvent;
 use NeuronCore\Maestro\Events\BeforeChatEvent;
 use NeuronCore\Maestro\Events\ToolApprovalRequestedEvent;
 use NeuronCore\Maestro\Extension\ExtensionLoader;
+use NeuronCore\Maestro\Extension\ManifestManager;
 use NeuronCore\Maestro\Extension\Registry\CommandRegistry;
 use NeuronCore\Maestro\Listeners\CliOutputListener;
 use NeuronCore\Maestro\Orchestrator\AgentOrchestrator;
@@ -76,6 +77,9 @@ class MaestroCommand extends Command
         }
 
         $this->loader = ExtensionLoader::create(new GenericRenderer(), $settings);
+
+        // Ensure manifest is up-to-date before loading extensions
+        (new ManifestManager())->ensureManifestExists();
 
         // Load extensions from manifest and settings
         try {
