@@ -59,11 +59,6 @@ class DarkThemeTest extends TestCase
         $this->assertSame('options=bold', (new DarkTheme())->style(StyleName::BOLD));
     }
 
-    public function testStyleDim(): void
-    {
-        $this->assertSame('options=dim', (new DarkTheme())->style(StyleName::DIM));
-    }
-
     public function testStyleUnderline(): void
     {
         $this->assertSame('options=underscore', (new DarkTheme())->style(StyleName::UNDERLINE));

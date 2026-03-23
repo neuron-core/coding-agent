@@ -9,6 +9,7 @@ use NeuronCore\Maestro\Console\SelectMenuHelper;
 use NeuronCore\Maestro\Console\SpinnerProgress;
 use NeuronCore\Maestro\Events\AgentResponseEvent;
 use NeuronCore\Maestro\Events\AgentThinkingEvent;
+use NeuronCore\Maestro\Events\BeforeChatEvent;
 use NeuronCore\Maestro\Extension\Ui\Text;
 use NeuronCore\Maestro\Events\ToolApprovalRequestedEvent;
 use NeuronCore\Maestro\Extension\Registry\RendererRegistry;
@@ -23,6 +24,7 @@ use Symfony\Component\Console\Question\Question;
 
 use function in_array;
 use function str_repeat;
+use function sprintf;
 
 class CliOutputListener
 {
@@ -39,6 +41,15 @@ class CliOutputListener
         protected readonly UiEngine $uiEngine,
         protected readonly MarkdownRenderer $markdownRenderer,
     ) {
+    }
+
+    public function onBeforeChat(BeforeChatEvent $event): void
+    {
+        // Clear the blank line written after readline and the readline prompt line itself,
+        // then print the user input with light gray background
+        $this->output->write("\033[1A\033[2K\033[1A\033[2K\r");
+        $this->output->writeln(sprintf('<fg=black;bg=gray> %s </>', $event->userInput));
+        $this->output->writeln('');
     }
 
     public function onThinking(AgentThinkingEvent $event): void

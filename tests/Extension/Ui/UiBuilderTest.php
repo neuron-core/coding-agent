@@ -29,7 +29,6 @@ class UiBuilderTest extends TestCase
         ]);
         $mock->method('style')->willReturnMap($styleMap ?: [
             [StyleName::BOLD,      'options=bold'],
-            [StyleName::DIM,       'options=dim'],
             [StyleName::UNDERLINE, 'options=underscore'],
             [StyleName::DEFAULT,   ''],
         ]);

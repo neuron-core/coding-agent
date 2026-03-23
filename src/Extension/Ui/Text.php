@@ -100,12 +100,6 @@ class Text implements Stringable
         return $this;
     }
 
-    public function dim(): self
-    {
-        $this->style = StyleName::DIM;
-        return $this;
-    }
-
     public function underline(): self
     {
         $this->style = StyleName::UNDERLINE;

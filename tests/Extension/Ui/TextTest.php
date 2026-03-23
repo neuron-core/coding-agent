@@ -72,12 +72,6 @@ class TextTest extends TestCase
         $this->assertSame('<options=bold>test</>', $result);
     }
 
-    public function testDimStyle(): void
-    {
-        $result = Text::content('test')->dim()->build();
-        $this->assertSame('<options=dim>test</>', $result);
-    }
-
     public function testUnderlineStyle(): void
     {
         $result = Text::content('test')->underline()->build();
@@ -110,8 +104,8 @@ class TextTest extends TestCase
 
     public function testMultipleStylesCanOverride(): void
     {
-        $result = Text::content('test')->bold()->dim()->build();
-        $this->assertSame('<options=dim>test</>', $result);
+        $result = Text::content('test')->bold()->underline()->build();
+        $this->assertSame('<options=underscore>test</>', $result);
     }
 
     public function testMultipleColorsCanOverride(): void
@@ -131,7 +125,6 @@ class TextTest extends TestCase
         ]);
         $mockTheme->method('style')->willReturnMap([
             [StyleName::BOLD, ''],
-            [StyleName::DIM, ''],
             [StyleName::UNDERLINE, ''],
             [StyleName::DEFAULT, ''],
         ]);

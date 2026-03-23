@@ -13,6 +13,7 @@ use NeuronCore\Maestro\EventBus\EventDispatcher;
 use NeuronCore\Maestro\Extension\Ui\Text;
 use NeuronCore\Maestro\Events\AgentResponseEvent;
 use NeuronCore\Maestro\Events\AgentThinkingEvent;
+use NeuronCore\Maestro\Events\BeforeChatEvent;
 use NeuronCore\Maestro\Events\ToolApprovalRequestedEvent;
 use NeuronCore\Maestro\Extension\ExtensionLoader;
 use NeuronCore\Maestro\Extension\Registry\CommandRegistry;
@@ -102,6 +103,7 @@ class MaestroCommand extends Command
             new MarkdownRenderer($this->loader->uiEngine()->theme()),
         );
 
+        $dispatcher->subscribe(BeforeChatEvent::class, $listener->onBeforeChat(...));
         $dispatcher->subscribe(AgentThinkingEvent::class, $listener->onThinking(...));
         $dispatcher->subscribe(AgentResponseEvent::class, $listener->onResponse(...));
         $dispatcher->subscribe(ToolApprovalRequestedEvent::class, $listener->onToolApprovalRequested(...));

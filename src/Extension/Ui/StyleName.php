@@ -11,6 +11,5 @@ enum StyleName: string
 {
     case DEFAULT = 'default';
     case BOLD = 'bold';
-    case DIM = 'dim';
     case UNDERLINE = 'underline';
 }

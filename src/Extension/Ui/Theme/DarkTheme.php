@@ -36,7 +36,6 @@ class DarkTheme implements ThemeInterface
     {
         return match ($style) {
             StyleName::BOLD      => 'options=bold',
-            StyleName::DIM       => 'options=dim',
             StyleName::UNDERLINE => 'options=underscore',
             StyleName::DEFAULT   => '',
         };
