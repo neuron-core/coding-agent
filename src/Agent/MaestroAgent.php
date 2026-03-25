@@ -57,6 +57,8 @@ class MaestroAgent extends Agent
             key: $this->settings->get('inspector_key'),
             autoFlush: true,
         ));
+
+        $this->toolMaxRuns(1000);
     }
 
     protected function middleware(): array
